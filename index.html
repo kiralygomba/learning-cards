@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Card Catalog — Bridge Study Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:        #efe5cf;
+  --paper-light:  #f8f1dc;
+  --paper-deep:   #e3d6b8;
+  --ink:          #1f1a14;
+  --ink-soft:     #3a3226;
+  --ink-faint:    #6e6249;
+  --rule-red:     #a83232;
+  --rule-blue:    #4a6b8a;
+  --stamp-green:  #3d5a35;
+  --stamp-red:    #8b2e2e;
+  --gold:         #8a6a2a;
+  --shadow:       rgba(40,30,15,0.18);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+
+body {
+  font-family: 'EB Garamond', Georgia, serif;
+  color: var(--ink); 
+  background: var(--paper);
+  min-height: 100vh; 
+  position: relative; 
+  overflow-x: hidden;
+  font-size: 18px; 
+  line-height: 1.55;
+}
+
+body::before {
+  content: ""; 
+  position: fixed; 
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at center, transparent 0%, rgba(60,40,15,0.18) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.1  0 0 0 0 0.05  0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  pointer-events: none; 
+  z-index: 1; 
+  mix-blend-mode: multiply; 
+  opacity: .55;
+}
+
+body::after {
+  content: ""; 
+  position: fixed; 
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(60,40,15,0.02) 3px 4px);
+  pointer-events: none; 
+  z-index: 2;
+}
+
+main { 
+  position: relative; 
+  z-index: 3; 
+  max-width: 980px; 
+  margin: 0 auto; 
+  padding: 48px 28px 96px; 
+}
+
+header.masthead { 
+  text-align: center; 
+  padding: 18px 0 36px; 
+  border-bottom: 1px solid var(--ink); 
+  position: relative; 
+  margin-bottom: 48px; 
+}
+header.masthead::after { 
+  content: ""; 
+  position: absolute; 
+  left: 0; 
+  right: 0; 
+  bottom: -5px; 
+  height: 1px; 
+  background: var(--ink); 
+}
+
+.eyebrow { 
+  font-family: 'Special Elite', monospace; 
+  font-size: 11px; 
+  letter-spacing: .42em; 
+  text-transform: uppercase; 
+  color: var(--ink-faint); 
+  margin-bottom: 14px; 
+}
+h1.title { 
+  font-family: 'Cormorant Garamond', serif; 
+  font-weight: 600; 
+  font-size: clamp(40px, 7vw, 72px); 
+  letter-spacing: -.01em; 
+  line-height: 1; 
+  margin-bottom: 8px; 
+}
+h1.title em { font-style: italic; font-weight: 500; color: var(--rule-red); }
+.tagline { 
+  font-family: 'EB Garamond', serif; 
+  font-style: italic; 
+  font-size: 18px; 
+  color: var(--ink-soft); 
+  letter-spacing: .02em; 
+}
+.stamp-mark { 
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  font-family: 'Special Elite', monospace; 
+  font-size: 10px; 
+  letter-spacing: .18em; 
+  color: var(--stamp-red); 
+  border: 1.5px solid var(--stamp-red); 
+  padding: 6px 10px; 
+  transform: rotate(6deg); 
+  opacity: .7; 
+}
+
+.screen { display: none; animation: fadeIn .55s ease both; }
+.screen.active { display: block; }
+@keyframes fadeIn { 
+  from { opacity: 0; transform: translateY(12px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+
+.section-head { 
+  display: flex; 
+  align-items: baseline; 
+  justify-content: space-between; 
+  margin-bottom: 28px; 
+  padding-bottom: 14px; 
+  border-bottom: 1px dashed var(--ink-faint); 
+}
+.section-head h2 { 
+  font-family: 'Cormorant Garamond', serif; 
+  font-weight: 500; 
+  font-size: 32px; 
+  letter-spacing: -.005em; 
+}
+.section-head .meta { 
+  font-family: 'Special Elite', monospace; 
+  font-size: 11px; 
+  letter-spacing: .2em; 
+  color: var(--ink-faint); 
+  text-transform: uppercase; 
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+  gap: 22px; 
+}
+.tile {
+  position: relative; 
+  background: var(--paper-light); 
+  border: 1px solid var(--ink);
+  padding: 24px 22px 22px; 
+  cursor: pointer;
+  transition: transform .25s ease, box-shadow .25s ease;
+  box-shadow: 3px 3px 0 var(--ink); 
+  text-align: left;
+  font-family: inherit; 
+  color: inherit; 
+  display: block; 
+  width: 100%;
+}
+.tile:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.tile:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+
+.tile .call-number { 
+  font-family: 'Special Elite', monospace; 
+  font-size: 10px; 
+  letter-spacing: .22em; 
+  color: var(--ink-faint); 
+  text-transform: uppercase; 
+  margin-bottom: 10px; 
+  display: block; 
+}
+.tile h3 { 
+  font-family: 'Cormorant Garamond', serif; 
+  font-weight: 600; 
+  font-size: 24px; 
+  line-height: 1.15; 
+  margin-bottom: 8px; 
+  letter-spacing: -.005em; 
+}
+.tile h3 em { font-style: italic; color: var(--rule-red); font-weight: 500; }
+.tile p { font-size: 15px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 14px; }
+.tile .footer-line { 
+  display: flex; justify-content: space-between; align-items: center; 
+  padding-top: 12px; border-top: 1px dotted var(--ink-faint); 
+  font-family: 'Special Elite', monospace; font-size: 10px; 
+  letter-spacing: .18em; color: var(--ink-faint); text-transform: uppercase; 
+}
+
+.crumbs { 
+  font-family: 'Special Elite', monospace; font-size: 11px; 
+  letter-spacing: .22em; text-transform: uppercase; 
+  color: var(--ink-faint); margin-bottom: 24px; 
+}
+.crumbs a { 
+  color: var(--ink-soft); text-decoration: none; 
+  border-bottom: 1px solid transparent; cursor: pointer; transition: border-color .2s; 
+}
+.crumbs a:hover { border-color: var(--ink-soft); }
+.crumbs span.sep { margin: 0 10px; color: var(--ink-faint); }
+
+.scoreboard { 
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; 
+  border: 1px solid var(--ink); background: var(--paper-light); 
+  margin-bottom: 32px; font-family: 'Special Elite', monospace; 
+}
+.score { padding: 14px 12px; text-align: center; border-right: 1px solid var(--ink); }
+.score:last-child { border-right: none; }
+.score .label { 
+  display: block; font-size: 9px; letter-spacing: .32em; 
+  text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; 
+}
+.score .value { 
+  font-family: 'Cormorant Garamond', serif; font-size: 30px; 
+  font-weight: 600; color: var(--ink); letter-spacing: -.01em; line-height: 1; 
+}
+.score.success .value { color: var(--stamp-green); }
+.score.fail .value { color: var(--stamp-red); }
+.score.streak .value::before { content: "× "; }
+
+.progress-rail { 
+  height: 6px; background: var(--paper-deep); border: 1px solid var(--ink); 
+  margin-bottom: 30px; position: relative; overflow: hidden; 
+}
+.progress-fill { 
+  height: 100%; background: repeating-linear-gradient(-45deg, var(--ink) 0 6px, var(--ink-soft) 6px 12px); 
+  width: 0%; transition: width .4s cubic-bezier(.2,.8,.2,1); 
+}
+
+.card-stage { perspective: 2400px; margin: 0 auto 32px; max-width: 680px; min-height: 460px; position: relative; }
+.card { 
+  position: relative; width: 100%; min-height: 460px; 
+  transform-style: preserve-3d; transition: transform .85s cubic-bezier(.4,.05,.2,1); cursor: pointer; 
+}
+.card.flipped { transform: rotateY(180deg); }
+.card.swapping { animation: cardSwap .5s ease both; }
+@keyframes cardSwap {
+  0%   { opacity: 1; transform: translateX(0) rotateY(0); }
+  50%  { opacity: 0; transform: translateX(-80px) rotateY(0); }
+  51%  { opacity: 0; transform: translateX(80px)  rotateY(0); }
+  100% { opacity: 1; transform: translateX(0) rotateY(0); }
+}
+
+.face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--paper-light); border: 1px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--ink), 0 14px 28px var(--shadow);
+  padding: 34px 38px 28px; display: flex; flex-direction: column;
+}
+.face.back { transform: rotateY(180deg); }
+.face::before { content: ""; position: absolute; left: 0; right: 0; top: 54px; height: 1px; background: var(--rule-red); opacity: .65; }
+.face::after {
+  content: ""; position: absolute; left: 38px; right: 38px; top: 80px; bottom: 60px;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 30px, var(--rule-blue) 30px 31px);
+  opacity: .18; pointer-events: none;
+}
+.face .hole { 
+  position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); 
+  width: 14px; height: 14px; border: 1px solid var(--ink-faint); border-radius: 50%; 
+  background: radial-gradient(circle, var(--paper) 35%, var(--paper-deep) 100%); 
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.18); 
+}
+
+.card-header { 
+  display: flex; justify-content: space-between; align-items: baseline; 
+  font-family: 'Special Elite', monospace; font-size: 10px; letter-spacing: .22em; 
+  text-transform: uppercase; color: var(--ink-faint); margin-bottom: 24px; position: relative; z-index: 2; 
+}
+.card-header .side-badge { border: 1px solid var(--ink-faint); padding: 3px 8px; }
+.card-body { 
+  flex: 1; display: flex; align-items: center; justify-content: center; 
+  text-align: center; padding: 20px 12px; position: relative; z-index: 2; overflow-y: auto; 
+}
+.card-prompt { 
+  font-family: 'Cormorant Garamond', serif; font-weight: 500; 
+  font-size: clamp(20px, 2.8vw, 28px); line-height: 1.3; letter-spacing: -.005em; color: var(--ink); 
+}
+.card-answer { 
+  font-family: 'EB Garamond', serif; font-weight: 400; 
+  font-size: clamp(16px, 2vw, 20px); line-height: 1.5; color: var(--ink); text-align: left; 
+}
+.card-answer em { color: var(--rule-red); font-style: italic; }
+.card-answer strong { color: var(--ink); font-weight: 600; }
+.card-footer { 
+  font-family: 'Special Elite', monospace; font-size: 10px; letter-spacing: .22em; 
+  text-transform: uppercase; color: var(--ink-faint); text-align: center; 
+  padding-top: 12px; border-top: 1px dotted var(--ink-faint); position: relative; z-index: 2; 
+}
+
+.stamp { 
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-14deg) scale(.4); 
+  font-family: 'Special Elite', monospace; font-size: 54px; font-weight: 700; 
+  letter-spacing: .14em; padding: 14px 30px; border: 5px double currentColor; 
+  opacity: 0; pointer-events: none; z-index: 5; white-space: nowrap; 
+}
+.stamp.show { animation: stampIn .65s cubic-bezier(.2,1.4,.4,1) forwards; }
+.stamp.success { color: var(--stamp-green); }
+.stamp.fail { color: var(--stamp-red); }
+@keyframes stampIn {
+  0%   { opacity: 0; transform: translate(-50%, -50%) rotate(-14deg) scale(2.4); }
+  60%  { opacity: 1; transform: translate(-50%, -50%) rotate(-14deg) scale(.95); }
+  100% { opacity: .92; transform: translate(-50%, -50%) rotate(-14deg) scale(1); }
+}
+
+.controls { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 14px; max-width: 680px; margin: 0 auto; }
+.btn { 
+  font-family: 'Special Elite', monospace; font-size: 12px; letter-spacing: .24em; 
+  text-transform: uppercase; padding: 18px 18px; background: var(--paper-light); 
+  border: 1px solid var(--ink); cursor: pointer; color: var(--ink); 
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease; 
+  box-shadow: 3px 3px 0 var(--ink); position: relative; 
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+.btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--ink); }
+.btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: 3px 3px 0 var(--ink); }
+.btn.success { background: var(--stamp-green); color: var(--paper-light); border-color: var(--stamp-green); }
+.btn.fail { background: var(--stamp-red); color: var(--paper-light); border-color: var(--stamp-red); }
+.btn.next { background: var(--ink); color: var(--paper-light); border-color: var(--ink); }
+.btn .kbd { 
+  display: inline-block; margin-left: 8px; padding: 1px 6px; 
+  font-size: 10px; border: 1px solid currentColor; border-radius: 2px; opacity: .55; 
+}
+
+.sub-controls { 
+  margin-top: 22px; display: flex; justify-content: center; gap: 24px; 
+  font-family: 'Special Elite', monospace; font-size: 11px; letter-spacing: .18em; 
+  text-transform: uppercase; flex-wrap: wrap; 
+}
+.sub-controls button { 
+  background: none; border: none; color: var(--ink-faint); cursor: pointer; 
+  font: inherit; letter-spacing: inherit; text-transform: inherit; 
+  border-bottom: 1px dotted var(--ink-faint); padding: 2px 0; transition: color .2s; 
+}
+.sub-controls button:hover { color: var(--rule-red); border-bottom-color: var(--rule-red); }
+
+.summary-card { 
+  background: var(--paper-light); border: 1px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); 
+  padding: 48px 40px; max-width: 680px; margin: 0 auto; text-align: center; position: relative; 
+}
+.summary-card .seal { 
+  position: absolute; top: 24px; right: 24px; width: 90px; height: 90px; 
+  border: 2px solid var(--gold); border-radius: 50%; display: flex; align-items: center; 
+  justify-content: center; font-family: 'Special Elite', monospace; font-size: 9px; 
+  letter-spacing: .2em; color: var(--gold); text-align: center; line-height: 1.3; 
+  padding: 6px; transform: rotate(-8deg); 
+}
+.summary-card .seal::before { content: ""; position: absolute; inset: 5px; border: 1px dashed var(--gold); border-radius: 50%; }
+.summary-card h2 { font-family: 'Cormorant Garamond', serif; font-weight: 500; font-size: 42px; margin-bottom: 8px; }
+.summary-card h2 em { font-style: italic; color: var(--rule-red); }
+.summary-card .lede { font-style: italic; color: var(--ink-soft); margin-bottom: 28px; }
+.summary-stats { 
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; 
+  padding: 24px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); 
+}
+.summary-stats .stat .v { font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 600; line-height: 1; }
+.summary-stats .stat .l { font-family: 'Special Elite', monospace; font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--ink-faint); margin-top: 6px; }
+.summary-stats .stat.success .v { color: var(--stamp-green); }
+.summary-actions { display: flex; gap: 14px; justify-content: center; margin-top: 24px; flex-wrap: wrap; }
+
+footer.colophon { 
+  margin-top: 64px; padding-top: 24px; border-top: 1px dashed var(--ink-faint); 
+  text-align: center; font-family: 'Special Elite', monospace; font-size: 10px; 
+  letter-spacing: .24em; text-transform: uppercase; color: var(--ink-faint); 
+}
+
+@media (max-width: 640px) {
+  main { padding: 30px 16px 60px; }
+  .scoreboard { grid-template-columns: repeat(2, 1fr); }
+  .score { border-bottom: 1px solid var(--ink); }
+  .score:nth-child(3), .score:nth-child(4) { border-bottom: none; }
+  .score:nth-child(even) { border-right: none; }
+  .controls { grid-template-columns: 1fr 1fr; }
+  .controls .btn.next { grid-column: 1 / -1; }
+  .face { padding: 24px 22px 22px; }
+  .face::after { left: 22px; right: 22px; }
+  .summary-card { padding: 32px 20px; }
+  .summary-card .seal { width: 70px; height: 70px; font-size: 8px; top: 16px; right: 16px; }
+}
+</style>
+</head>
+
+<body>
+
+<main>
+
+<header class="masthead">
+  <div class="eyebrow">Bridge Szabálytár · SAYC alapokra építve</div>
+  <h1 class="title">The Card <em>Catalog</em></h1>
+  <div class="tagline">Bridge tanulóterem — Jánoki &amp; Uhrin szabályzata szerint.</div>
+  <div class="stamp-mark">Bridge / Property of the Reader</div>
+</header>
+
+<section class="screen active" id="screen-topics">
+  <div class="section-head">
+    <h2>Válassz tématerületet</h2>
+    <div class="meta">A Szekció · Téma szerinti index</div>
+  </div>
+  <div class="grid" id="topics-grid"></div>
+</section>
+
+<section class="screen" id="screen-chapters">
+  <div class="crumbs" id="crumbs-chapters"></div>
+  <div class="section-head">
+    <h2 id="chapters-title">—</h2>
+    <div class="meta">Válassz fejezetet</div>
+  </div>
+  <div class="grid" id="chapters-grid"></div>
+</section>
+
+<section class="screen" id="screen-study">
+  <div class="crumbs" id="crumbs-study"></div>
+
+  <div class="scoreboard">
+    <div class="score"><span class="label">Látott</span><span class="value" id="stat-seen">0</span></div>
+    <div class="score success"><span class="label">Megvolt</span><span class="value" id="stat-success">0</span></div>
+    <div class="score fail"><span class="label">Tanulni</span><span class="value" id="stat-fail">0</span></div>
+    <div class="score streak"><span class="label">Sorozat</span><span class="value" id="stat-streak">0</span></div>
+  </div>
+
+  <div class="progress-rail"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <div class="card-stage">
+    <div class="card" id="card">
+      <div class="face front">
+        <div class="card-header">
+          <span id="card-index">Lap 1 / 1</span>
+          <span class="side-badge">Recto · Kérdés</span>
+        </div>
+        <div class="card-body">
+          <div class="card-prompt" id="card-question">—</div>
+        </div>
+        <div class="card-footer">Koppints a lapra vagy nyomj <strong>Szóköz</strong>-t a fordításhoz</div>
+        <div class="hole"></div>
+      </div>
+      <div class="face back">
+        <div class="card-header">
+          <span class="side-badge">Verso · Válasz</span>
+          <span id="card-index-back">Lap 1 / 1</span>
+        </div>
+        <div class="card-body">
+          <div class="card-answer" id="card-answer">—</div>
+        </div>
+        <div class="card-footer">Jelöld a tudásod · majd lépj tovább</div>
+        <div class="hole"></div>
+      </div>
+      <div class="stamp success" id="stamp-success">MEGVOLT</div>
+      <div class="stamp fail" id="stamp-fail">TANULNI</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn fail"    id="btn-fail">Tanulni <span class="kbd">2</span></button>
+    <button class="btn success" id="btn-success">Megvolt <span class="kbd">1</span></button>
+    <button class="btn next"    id="btn-next">Következő <span class="kbd">→</span></button>
+  </div>
+
+  <div class="sub-controls">
+    <button id="btn-flip">Fordítás <span class="kbd" style="border:1px dotted currentColor;padding:1px 5px;font-size:9px;margin-left:4px">Space</span></button>
+    <button id="btn-shuffle">Pakli keverése</button>
+    <button id="btn-restart-chapter">Fejezet újrakezdése</button>
+    <button id="btn-end-session">Munkamenet vége</button>
+  </div>
+</section>
+
+<section class="screen" id="screen-summary">
+  <div class="summary-card">
+    <div class="seal" id="seal">EX<br>LIBRIS<br>STUDII</div>
+    <h2>Munkamenet <em>lezárva</em></h2>
+    <div class="lede" id="summary-lede">Tisztességes teljesítmény mai napra.</div>
+    <div class="summary-stats">
+      <div class="stat success"><div class="v" id="sum-success">0</div><div class="l">Megvolt</div></div>
+      <div class="stat"><div class="v" id="sum-seen">0</div><div class="l">Látott / Össz</div></div>
+      <div class="stat"><div class="v" id="sum-rate">0%</div><div class="l">Pontosság</div></div>
+    </div>
+    <div id="summary-missed-block" style="display:none;text-align:left;margin-top:12px">
+      <div style="font-family:'Special Elite',monospace;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:10px">Átismétlésre jelölt lapok</div>
+      <ul id="summary-missed" style="list-style:none;font-style:italic;color:var(--ink-soft);font-size:16px;line-height:1.6"></ul>
+    </div>
+    <div class="summary-actions">
+      <button class="btn" id="btn-review-missed">Csak a hibázottak</button>
+      <button class="btn" id="btn-redo-chapter">Fejezet újra</button>
+      <button class="btn next" id="btn-back-catalog">Vissza a katalógushoz</button>
+    </div>
+  </div>
+</section>
+
+<footer class="colophon">Bound &amp; Catalogued · Bridge Stack r3.1 · Tanulj szándékkal</footer>
+
+</main>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   BRIDGE FLASHCARDS — Jánoki & Uhrin szabályzata (r3.1) alapján
+   ════════════════════════════════════════════════════════════ */
+
+const FLASHCARD_DATA = {
+  "bridge": {
+    title: "Bridge <em>Szabályzat</em>",
+    plainTitle: "Bridge",
+    callNumber: "BR-310",
+    description: "Versenybridge SAYC-alapokra építve — Jánoki Imre és Uhrin Ákos r3.1 szabályzata szerint.",
+    chapters: {
+
+      /* 1. FŐSZABÁLYOK */
+      "foszabalyok": {
+        title: "1. Főszabályok",
+        description: "Az induló és a segítő alapszabályai, 2/1 Game Forcing és reverse bidding.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Mikor indulj 1-es szinten színes nyitással? Mi az alapszabály a 12 ponton aluli kéznél?",
+            a: "Mindig nyiss 1-es színt, ha legalább <em>12 pontod</em> van. Kevesebb ponttal (10–12) is nyithatsz, ha hosszú színed vagy kedvező eloszlásod van — ekkor a <strong>Rule of 20</strong> a döntő: HCP + a két leghosszabb szín hossza ≥ 20." },
+          { q: "Mit jelent indulóként a 16 pont alatti határ második licit szempontjából?",
+            a: "16 pont alatt <em>ne emelj második szintre</em>, kivéve ha: (1) a partner színét emeled, (2) a saját extrahosszú (6+) színedet ismétled magasabb szinten, vagy (3) második, <strong>alacsonyabb rangú</strong> új színt mutatsz be (4+ lappal). 17+ HCP-vel viszont magasabb rangú új színt is bemondhatsz — ez a <em>reverse</em>." },
+          { q: "Az általános irányelvek szerint mivel indulsz: 5-5 a nemesekben? 4-4 a nem-nemesekben? 3-3 a nem-nemesekben?",
+            a: "5-5 nemes → <strong>pikkel</strong> (a kőrt később mutatod). 4-4 nem-nemes → <strong>káróval</strong> (ha van 3-nál több káród). 3-3 nem-nemes → <strong>treffel</strong> (convenient minor). Általában: 5-ös nemes → mindig azzal indulsz." },
+          { q: "Mit jelez az 1NT, 2NT és 3NT induló licit?",
+            a: "<strong>1NT</strong>: pontosan 15–17 HCP, balanced (4-3-3-3, 4-4-3-2, 5-3-3-2). <strong>2NT (Stop)</strong>: 20–21 HCP balanced — Stayman + transfer érvényben. <strong>3NT (Stop)</strong>: pontosan 24–26 HCP, balanced." },
+          { q: "Mit jelent a 11–14 HCP-s induló rebid 1NT, és mi a 18–19 HCP-s ugrás 2NT-re?",
+            a: "<em>1 valami → válasz → 1NT</em>: 11–14 HCP balanced. <em>1 valami → válasz → 2NT (ugrással)</em>: 18–19 HCP balanced. Ezek a sorozatok különböztetik meg a 12–14 / 15–17 / 18–19 / 20–21 / 22–24 tartományokat induló kéznél." },
+          { q: "Mikor nyiss <em>Stop 2♣</em> erős nyitást? (r3.1 feltételek!)",
+            a: "Akkor, ha (1) <strong>22+ HCP</strong> balanced, <strong>VAGY</strong> (2) <strong>19+ HCP + 9+ playing trick</strong> (eloszlásos kéz, „1 ütés hiányzik a gémhez\"). A partnernek kötelező válaszolnia. Lásd még a Rule of 44-et. <em>Figyelem: a korábbi „17 HCP\" küszöb tévedés volt!</em>" },
+          { q: "Mit jelent, hogy „1 ütés hiányzik a gémhez\" erős 2♣ kontextusban?",
+            a: "Egy 4-major gémhez 10 ütés kell. Ha a saját kezedben — a partner segítsége nélkül — látsz <strong>9 biztos vagy szinte biztos ütést</strong>, akkor a partnertől már csak 1 ütés kell. Ez veszélyes 1-es szinten nyitni, mert a partner passzolhat. A 2♣ <em>kötelező válaszra</em> szólít fel, így nem maradsz 1-es szinten." },
+          { q: "Mi a Rule of 44, és mikor alkalmazod?",
+            a: "Stop 2♣-vel akkor is indulhatsz, ha nincs meg a 21 pontod, de van <strong>legalább 4 biztos ütésed</strong> (pl. 2 ász + 2 király egy színből), <strong>ÉS maximum 4 kiadód</strong> (LTC ≤ 4). Javasolt minimum: 18 HCP. Az „elosztásos, nem klasszikusan 21 HCP-s erős kéz\" megmentésére." },
+          { q: "Milyen pont-tartományokat jelez a gyenge 2-es a sebezhetőség függvényében?",
+            a: "<strong>Kedvezőtlen</strong> (mi bellben, ők mansban): 6–10 pont. <strong>Kedvező</strong> (mi mansban, ők bellben): 5–11 pont, agresszívebben nyitható. Pontosan <em>6-lapos</em> adu szín kell. A 3-as gyenge: 6–11 pont, pontosan 7-lapos erős színnel (min. 2 figura)." },
+          { q: "Mikor NE nyiss gyenge 2-est, még ha rá is jönne a pontodra?",
+            a: "(1) Ha megvan a Rule of 20-ad → akkor <strong>1-es szintet</strong> nyiss! (2) Ha a kezedben „két sima ász\" van (pl. ♠A és ♣A egy gyenge 6 kőr mellett). (3) Ha erős holdingod van külső színben (pl. egy 4 lapos KQJx mellékszín). A gyenge 2-es erejének a saját nevezett színéből kell jönnie." },
+          { q: "Mi a Rule of 20 pontos megfogalmazása, és melyik nyitásokra vonatkozik?",
+            a: "<strong>HCP + a két leghosszabb szín hossza ≥ 20</strong>, akkor nyiss. <em>Példa:</em> ♠AQxxx ♥xx ♦KJxx ♣Qx → 11+5+4=20 → 1♠ nyitás. Kizárólag az <strong>1-szintű színes nyitásokra</strong> vonatkozik! A gyenge 2-est, gyenge 3-ast, 1NT-t NEM indokolja." },
+          { q: "Az induló viszontválasza: új szín, első szín emelése, ugrás saját színben — mit jelez?",
+            a: "<strong>Új szín</strong> (pl. 1♣ → 1♥ → 1♠): 4+ lap, 13–20 pont. <strong>Első szín emelése</strong> (1♣ → 1♥ → 2♣): hosszabb szín (nemes 6+, alsó 5+), 12–16 pont. <strong>Ugrás saját színben</strong> (1♣ → 1♥ → 3♣): erősebb 17–20 pont." },
+          { q: "Mit jelez az induló az 1NT (12–14) és a 2NT (új) viszontválasszal a partner válasza után?",
+            a: "<strong>1NT rebid</strong> (1♣ → 1♥ → 1NT): 12–14 pont, a partner színében nincs 4 lap, és nincs másik 4-lap szín az 1-es szinten. <strong>2NT rebid</strong>: már tudjuk, hogy megvan a gémhez a pont; vagy stoppert kérdezünk (Western Cue bid), vagy slem felé tapogatózunk." },
+          { q: "Mi a Reverse Bidding, mikor történik, és mit ígér?",
+            a: "Amikor a nyitó a <strong>második licitjével magasabb rangú színt mond be, mint az első, ráadásul kettes szinten</strong>. Példa: 1♣ → 1♠ → <strong>2♦</strong>. Ígér: <strong>17+ HCP</strong>, az első szín mindig hosszabb (pl. 5+ treff, pontosan 4 káró). A segítő számára <em>legalább 1 körig forcing — tilos elpasszolni!</em>" },
+          { q: "Mit csinálj 16–17 HCP-vel reverse-helyzetben? Mit csinálj 17+ HCP-vel?",
+            a: "16–17 HCP-vel gyakran jobb <strong>1NT rebid</strong> (11–14 tartományba). <strong>17+ HCP-vel viszont KÖTELEZŐ reverse-elni</strong>, hogy a partner ne álljon meg gém alatt." },
+          { q: "Mi a 2/1 Game Forcing definíciója, és mit ígér?",
+            a: "Ha a partner 1-es szinten nyit (1♦, 1♥, 1♠) és te <strong>ugrás nélkül, 2-es szinten egy alacsonyabb rangú új színt</strong> mondasz be (pl. 1♠ → 2♣ / 2♦ / 2♥), az azonnali <em>Game Forcing</em>. Ígér: <strong>13+ HCP</strong>. Onnantól semelyik licit nem passzolható gém alatt." },
+          { q: "Az 1♠ → 2♥ valódi 2/1 Game Force? Mi a kivétel?",
+            a: "<em>Nem szigorúan</em> — a 2♥ a pikkre nézve magasabb rangú (reverse-jellegű). Sok pár mégis 2/1 GF-ként játssza; csapaton belüli megegyezés kérdése. A többi „1-szint új szín → 2-szint alacsonyabb új szín\" valódi GF." },
+          { q: "Mikor válaszol a segítő, és mit jelez a partner 1♣/1♦ nyitására 4+ lapos nemessel?",
+            a: "Általában akkor válaszol, ha <strong>legalább 6 pontja van</strong>. Nem nemes nyitásra (1♣/1♦) <em>mindig</em> a 4+ lapos nemest mondja be. Ha mindkét nemesből 4 lapja hold → <strong>kőrrel</strong>." },
+          { q: "Mit jelez a segítő 6–9 ponttal a partner 1♥/1♠ nyitására?",
+            a: "<strong>3+ lap support</strong> esetén egy szintet emel (1♠ → 2♠). Ez a sima emelés 3 lapos (nem 4!) fitet ígér; a 4 lapos fitet a Bergen Raises rendszer külön mutatja. 1NT (6–12 HCP, semi-forcing) válasz, ha nincs elég lap a partner színében." },
+          { q: "Mi a Semi-forcing 1NT, és miben különbözik a klasszikus forcing 1NT-től?",
+            a: "Az 1♥/1♠ nyitásra adott 1NT (6–12 HCP) <strong>semi-forcing</strong>: a nyitó elméletileg passzolhatja, de <em>csak és kizárólag</em> teljesen lapos minimummal (12–13 HCP, balanced). Más kézzel licitálnia kell. A klasszikus forcing 1NT-vel ellentétben a passzolt minimumokat nem viszi fel feleslegesen." },
+          { q: "Mit jelent az inverted minor: erős sima emelés, és gyenge ugró emelés?",
+            a: "<strong>Sima emelés (erős)</strong>: 1♣ → 2♣ vagy 1♦ → 2♦ = 10+ pont, 4+ lap támogatás, nincs 4-es nemes, 1 körig forcing. <strong>Ugró emelés (gyenge)</strong>: 1♣ → 3♣ vagy 1♦ → 3♦ = 0–6 pont, 5+ lap támogatás, nincs 4-es nemes, preemptív. <em>Csak akkor érvényes, ha az ellenfél NEM szólt közbe!</em>" },
+          { q: "Mi a Jacoby 2NT feltétele, és mit ígér?",
+            a: "Csak <strong>nemes nyitásra</strong> (1♥/1♠), <strong>közvetlenül</strong> a segítőtől, és csak ha az ellenfél nem szólt közbe. <strong>13+ HCP</strong> és <strong>4+ lap támogatás</strong>. Műlicit, Game Forcing, slem-érdeklődést jelez." },
+          { q: "Mit jelez az induló a Jacoby 2NT-re adott 3-szintű új színnel, ill. 4-szintű új színnel?",
+            a: "<strong>3 szinten új szín</strong>: 0 vagy 1 a színből (<em>splinter / shortness</em>). <strong>4 szinten új szín</strong>: 4 vagy több lap a színből (erős mellékszín). <strong>3 a saját szín</strong>: 17–20 pont, slem-érdeklődés. <strong>3NT</strong>: 13–16 pont, nincs egyke/színhiány. <strong>4♣/4♦</strong>: 5+ lap a jelzett színből. <strong>4 a saját nemes</strong>: lezáró sign-off, rossz kéz." },
+          { q: "Milyen prioritás szerint válaszol az induló a Jacoby 2NT-re?",
+            a: "(1) Először <strong>erős 5+ lapos mellékszín</strong> bemondása. (2) Aztán <strong>egyke vagy színhiány</strong> jelzése. (3) Aztán <strong>ugrás 4 nemesre</strong> 12–14 ponttal. (4) Végül a megegyezett nemes <em>3-as szintű ismétlése</em> 16+ ponttal, ha nincs jobb licit." },
+          { q: "Mi a Bergen Raises rendszer összefoglalója (1M = 1♥ vagy 1♠ után, közbeszólás nélkül)?",
+            a: "<strong>1M – 3♣</strong>: gyenge mass-emelés, 6–9 HCP, <em>4 lapos adu</em>, konstruktív/preemptív. <strong>1M – 3♦</strong>: invitáló mass-emelés, 10–12 HCP, <em>4 lapos adu</em>. <strong>1M – 3M</strong>: preempt zárás, 0–5 HCP, 4 lapos adu. <strong>1M – 2NT (Jacoby)</strong>: GF, 13+ HCP, 4+ adu. Mind a négy esetben <em>pontosan 4</em> a fit (különbség a sima 2-es emelés 3 lapos fitjéhez képest)." },
+          { q: "Miért épít a Bergen Raises rendszer a Law of Total Tricks-re?",
+            a: "Mert mindenhol garantált a <em>4 lapos fit</em>, ezért tudjuk, hogy 9 adu van összesen → a 3-as szint biztonságos. Pontosabb döntés a kompetitív szintekről, mint a klasszikus „3-as fit a sima emelésben\" rendszer." },
+          { q: "Mi a negatív kontra alapszabálya, ha az ellenfél nemessel szólt közbe?",
+            a: "<strong>1♦ – 1♥ – X</strong>: a kontra <em>pontosan 4 lapos</em> pikket ígér (a másik, be nem mondott nemest). Ha 5 pikked lenne, közvetlenül 1♠-t mondanál. <strong>1♦ – 2♥ – X</strong>: szintén 4 lapos pikket ígér (a 2♠ már 5+ lap és 10+ pont lenne). Minimum 6+ HCP." },
+          { q: "Mi a negatív kontra, ha az ellenfél alsóval szólt közbe (1♣ – 1♦ – X)?",
+            a: "Mindkét nemesből <strong>pontosan 4-4 lapot</strong> ígér. Az <em>1♥</em> licit így 5+ kőrt sugallna. Ezzel az inferenciával: ha a segítő közvetlenül mondja a pikket egy közbeszólt kőr után, az automatikusan <em>5+ lapos pikket</em> jelez." },
+          { q: "Miért fontos, hogy a takeout double <strong>közbeszólásnak</strong> számít?",
+            a: "Mert minden konvenció, ami közbeszólásra „lekapcsol\", X-re is lekapcsol: az <em>Inverted Minor, Jacoby 2NT, Bergen Raises</em> NEM aktív. A 2/1 GF sem tisztán game-forcing többé. A Semi-forcing 1NT 7–10 HCP non-forcing lesz. Helyettük új struktúra indul." },
+          { q: "1♥/♠ – (X) – ? — Mit jelez a 2♥ sima emelés, a 3♥ ugró emelés és a 4♥ takeout double után?",
+            a: "<strong>2♥ (sima)</strong>: 6–9 HCP, 3+ adu, <em>konstruktív</em> (NEM preemptív, mint közbeszólás nélkül!). <strong>3♥ (ugró)</strong>: 0–6 HCP, 4+ adu, <em>preemptív/defenzív</em>. <strong>4♥</strong>: 0–7 HCP, 5+ adu, shape-es lezáró." },
+          { q: "Mi a Jordan 2NT, mikor használjuk, és mit ígér?",
+            a: "Helyzet: <strong>partner nemest nyitott, jobb ellenfél take-out kontrázott</strong>. A 2NT műlicit: <strong>10+ HCP, 4+ adu, limit+ raise</strong> (GF irány). Az egyetlen tiszta konstruktív licit a 4 fittel — a 3♥/3♠ ezek a helyzetek preemptív (gyenge) stílusúak." },
+          { q: "Mit jelez a rekontra (XX) takeout double után, és mit nem ígér?",
+            a: "<strong>10+ HCP</strong>, és <em>NINCS 4+ adu</em> (különben Jordan 2NT vagy splinter lenne). Penalty-irány, 1 körig forcing. Általában a balanced 13+ kéz, fit nélkül, ezen a sorozaton át jut el a 2NT licithez: 1♥ – (X) – XX – (Passz) – ? – (Passz) – 2NT (balanced 13+, nincs 4 fit)." },
+          { q: "Memóriasegítő: mit jelent a „direct raise, jump raise, 2NT és XX\" konstrukció takeout double után?",
+            a: "<strong>Direct raise (2♥)</strong> = 6–9 HCP, konstruktív. <strong>Jump raise (3♥)</strong> = 0–6 HCP, 4+ adu, preemptív. <strong>2NT (Jordan)</strong> = 10+ HCP, 4+ adu, slam-irány vagy biztos gém. <strong>XX (rekontra)</strong> = 10+ HCP, NINCS fit. A 4 lapos fit gyenge és erős kézzel is rögtön kiderül — információs előny a partner számára." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Hogyan számítjuk az eloszlási pontokat egy lap értékelésekor?",
+            a: "Színhiány (void): 3 pont (ha ellenfél színéből: 5). Egyke (singleton): 2 pont (ha ellenfél színéből: 3). Doubleton: 1 pont. Hosszú adu: 8 lap felett +1/lap. Védtelen honor (bare K/Q/J): -1 pont." },
+          { q: "Miből állnak össze a Zar Pontok és mennyi kell az induláshoz?",
+            a: "<strong>Zar Pontok = HCP + Kontroll pontok (A=6, K=4, Q=2, J=1) + Két leghosszabb szín hossza összeadva + (Leghosszabb szín - legrövidebb szín)</strong>. Az 1-es szintű nyitáshoz 26 Zar pont szükséges. Gémszinthez ~52, kis slemhez ~62." },
+          { q: "Mi a Losing Trick Count (LTC) alapelve, és mik a küszöbök fit esetén?",
+            a: "A biztos vesztők számítása színenként (max 3/szín). A, K, Q = -1 vesztő. Pl: Axx = 2 vesztő. LTC küszöbök összegzése (saját+partner): <strong>14</strong> = Gém (4-es szint), <strong>12</strong> = Kis slem (6-os szint), <strong>10</strong> = Nagy slem (7-es szint)." },
+          { q: "Mi a különbség a Bergen Raises és a Mixed Raise között?",
+            a: "A <strong>Bergen Raises</strong> (3♣ = 7–9, 4-fit; 3♦ = 10–12, 4-fit) <em>csak akkor működik, ha az ellenfél nem szólt közbe</em>. Ha az ellenfél közbeszól, a Bergen lekapcsol, és a <strong>Mixed Raise</strong> veszi át a szerepet (ahol a 3-as ugrás 6-9 preempt, a cuebid a 13+)." },
+          { q: "Milyen válaszokat ad a nyitó az Inverted Minor 1♣ → 2♣ (erős) emelés után?",
+            a: "Új szín 2-es szinten: stopper az adott színben (NT-t keresve). 2NT: minimum nyitó kéz, balanced. 3♣: minimum kéz, unbalanced. 3NT: maximum (18-19) balanced kéz." }
+        ]
+      },
+
+      /* 2. SPECIÁLIS INDULÁSOK ÉS VÁLASZOK */
+      "specialis-indulasok": {
+        title: "2. Speciális indulások és válaszok",
+        description: "1NT/2NT válaszok, gyenge 2-es válaszai, Lebensohl, erős 2♣ indulás.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Mikor passzol a segítő az 1NT nyitásra?",
+            a: "0–7 pont és nincs <em>5-ös nemes</em> (különben Jacoby transfer) vagy <em>6-os minor szín</em> (különben 2♠ minor transfer). Az 1NT 15–17 HCP balanced, a segítő számára passz minimum kéznél a legjobb döntés." },
+          { q: "Mit jelez az 1NT – 2♣ Stayman alapfeltétele, és mi a klasszikus pont-tartomány?",
+            a: "<strong>8+ pont</strong> és <em>pontosan 4 lap egyik vagy mindkét nemesből</em>. Cél a 4-4 nemes fit megtalálása. Az induló válasza: 2♦ (nincs 4-es nemes), 2♥ (4 kőr van), 2♠ (4 pikk van, esetleg 4 kőr is)." },
+          { q: "Mi a Garbage Stayman, és mikor használod?",
+            a: "<strong>Menekülés</strong> nagyon gyenge kézzel (0–7 pont), ha „rövid\" a treffed (pl. 4-4-4-1 vagy 4-4-5-0). Az 1NT elbukna treffben. Indítasz <strong>2♣-t</strong>; ha a nyitó nemest talál, passzolsz. Ha tagadja (2♦), saját 2♥/2♠-t mondasz — <em>sign-off</em>, a nyitónak kötelező passzolnia!" },
+          { q: "Mi a Smolen konvenció, és mikor használjuk?",
+            a: "Game Forcing kézzel (10+ pont) <strong>5-4 eloszlás a nemesekben</strong>. Nem indítható Jacoby Transfer (mert a 4 lapos nemes elveszne). <strong>2♣ → 2♦</strong> után <strong>ugrás a RÖVIDEBB nemes színben</strong> (3♥ vagy 3♠): a bemondott színben 4 lap, a másikban 5 lap. Így a nyitó 3 lap-fit-tel az 5-ös nemest mondhatja be, és ő lesz a felvevő — az erős kéz rejtett marad." },
+          { q: "Mi a Crawling (Creeping) Stayman, és mikor releváns?",
+            a: "Gyenge (0–7 HCP) kézzel, 4-4 nemes és rövid treff után. Ha az 1NT → 2♣ → <strong>2♥</strong> jött (nyitó kőrt talált), de te <em>4 pikket is</em> tartasz, a <strong>2♠</strong> rebid azt jelenti: <em>„4 pikkem van, és tudom, hogy 4+ köröd van. Te döntesz a 4-4 fit között.\"</em> Partner passzol 4 pikkel, vagy 3♥-re visszafordul." },
+          { q: "Mi a Crawling Stayman fő tévedési veszélye?",
+            a: "A natural-Stayman játszók szerint 1NT – 2♣ – 2♥ – <strong>2♠</strong> az invitációs 5+ pikk lenne. A Crawling variánst <em>előre meg kell beszélni</em> a partnerrel — a 2♠ itt 4 pikket + 4 kőr fit-keresést jelez, NEM 5+ pikk inv." },
+          { q: "Mi a Puppet Stayman, és mit keres meg a sima Staymanhez képest?",
+            a: "1NT-re 10+ HCP-vel (vagy 2NT-re 4–5 HCP-vel) <strong>3♣</strong> indítja; legalább egy 3-as hosszú nemes szükséges. A Puppet <em>5-ös ÉS 4-es nemest</em> is keres a nyitónál — hasznos 5-3 fit kereséshez. A sima Stayman csak 4-est keres." },
+          { q: "Hogyan válaszol a nyitó a Puppet Stayman 3♣ kérdésére?",
+            a: "<strong>3♦</strong>: van legalább egy 4-es nemes (de nincs 5-ös). <strong>3♥</strong>: 5 kőröm van. <strong>3♠</strong>: 5 pikkem van. <strong>3NT</strong>: nincs 4+ lapos nemes." },
+          { q: "Mi a Jacoby transfer alapja az 1NT nyitás után?",
+            a: "<strong>1NT → 2♦</strong>: 5+ kőr, partner mondja a 2♥-t. <strong>1NT → 2♥</strong>: 5+ pikk, partner mondja a 2♠-t. Az erős kéz (nyitó) fogadja a transfert, így ő lesz a felvevő — az indítás védettebb az erős kéz felé." },
+          { q: "Mi a szuper-elfogadás (super-accept), és mikor mond a nyitó 3-as szinten?",
+            a: "Ha a nyitónak <strong>4+ lap van a segítő nemeséből</strong> és <em>maximuma</em> (16–17 HCP), akkor a transfert nem 2-es szinten, hanem <strong>3-as szinten</strong> fogadja. Ez biztat a 4-es szintű gémre. Vagy: 2NT max + 2 lap doubleton balanced; 3♣/3♦/3♠ max + 4 lap + ütésforrás abban a színben." },
+          { q: "Mit jelez az 1NT → 2♠ válasz?",
+            a: "<strong>Minor suit transfer</strong>: 8+ pont, hatos hosszúságú nem nemes (minor) szín. Erre a nyitónak kötelezően <strong>3♣</strong>-t kell mondania; ha káró volt a hosszú szín, a segítő <strong>3♦</strong>-ra korrigál." },
+          { q: "Mit jelent az 1NT → 4NT, és mi NEM?",
+            a: "<strong>Kvantitatív meghívás 6NT-re</strong>: 16–17 HCP, balanced. A nyitó 15 ponttal passzol, 17-tel 6NT-re emel. <em>NEM ászkérdés!</em> 1NT után az ászkérdés a <strong>4♣ Gerber</strong>." },
+          { q: "Mit jelent a Texas transfer, és mikor használod?",
+            a: "<strong>1NT → 4♦</strong>: 6+ kőr, a nyitó mondja a 4♥-t. <strong>1NT → 4♥</strong>: 6+ pikk, a nyitó mondja a 4♠-t. Akkor használjuk, ha biztos gém van, és nincs slem-érdeklődés — a Jacoby + 4M jump alternatívája." },
+          { q: "Mit jelent a kontra (X) 1NT – 2-szintű természetes közbeszólás után?",
+            a: "<strong>Stayman-kontra</strong>: 8+ HCP, legalább egy 4-es nemes. A „Stayman a régi szerepben\" — a nyitó a saját 4-eseit licitálja. <em>Megj.:</em> 1NT – (2♣ Cappelletti) – X már <strong>penalty</strong> (lásd Cappelletti)." },
+          { q: "Mi a Lebensohl alapelve 1NT – (2♥/2♠) közbeszólás után?",
+            a: "<strong>„Slow shows, fast denies\"</strong> — a 2NT-en át menő (lassú) út <em>stoppert mutat</em>, a közvetlen 3-szintű (gyors) út <em>tagadja</em>. A 2NT relay → 3♣ kötelező, és onnan: gyenge sign-off, 8–9 invitálás, 10+ stoppert mutató 3NT, vagy cue bid stoppert kérdezve." },
+          { q: "Lebensohl: hogy mutatsz 10+ HCP-t stopper nélkül, ill. stopperrel a közbeszólt színben?",
+            a: "<strong>Közvetlen 3NT</strong>: 10+, GF, <em>NINCS stopper</em>. <strong>Lebensohl → 3NT (lassan)</strong>: 10+, GF, <em>VAN stopper</em>. <strong>3-as cue bid</strong> (a közbeszólt szín): GF, „van-e stoppered? → 3NT igen, más nem\"." },
+          { q: "Mit jelent a 2♥ → 4♥ ugró emelés, ill. a 2♥ → 3♥ sima emelés gyenge 2-esre?",
+            a: "<strong>4♥ ugrás</strong>: 4-es support és 0–5 pont, <em>preempt</em>. <strong>3♥ sima emelés</strong>: 3-as vagy 4-es support, 6–13 pont, szintén <em>preempt</em>. Új szín (2♥ → 2♠): 10–15 pont, 5+ hossz, nincs support, 1 körig forcing." },
+          { q: "Mi az OGUST, és mit kérdez 2♥ → 2NT után?",
+            a: "Mesterséges <strong>kérdés a gyenge 2-es kéz minőségére</strong>. Segítő 15+ ponttal mondja, a nyitó válaszol: <strong>3♣</strong>: gyenge (5–7), 1 top honor; <strong>3♦</strong>: gyenge, 2 top honor; <strong>3♥</strong>: jó (8–10), 1 top honor; <strong>3♠</strong>: jó, 2 top honor; <strong>3NT</strong>: jó, mind a 3 top honor." },
+          { q: "Mi a Lebensohl szabálya gyenge 2-esre adott takeout double után? (Pl. (2♥) – X – (Passz) – ?)",
+            a: "<strong>Cheap and fast = no stopper, slow via 2NT = stopper.</strong> Közvetlen 3NT: 10+, GF, NINCS stopper. Lebensohl 2NT → 3♣ → 3NT: 10+, GF, VAN stopper. 3♣/3♦ közvetlen: 8+ HCP, konstruktív/inv+. 3♥ cue: GF, kérdezi a másik nemest / stoppert." },
+          { q: "Mit jelez a 2♣ erős nyitás után a 2♦ válasz? És a 2♥?",
+            a: "<strong>2♦ negatív</strong>: 4–7 pont, nem ígér kárót, nem passzolható. <strong>2♥ dupla negatív</strong>: 0–3 pont, <em>nincs ász és nincs király</em>, nem ígér kőrt, nem passzolható. A többi válasz pozitív, 8+ pont, GF." },
+          { q: "Mit jelez a 2♣ – 2♠, 2♣ – 2NT, és a 2♣ – 3♣ válasz?",
+            a: "<strong>2♠</strong>: 8+ pont, 5-öt ígér pikkből, GF. <strong>2NT</strong>: 8–11 pont, balanced, GF. <strong>3♣</strong> (vagy 3♦, 3♥): 8+ pont, 5-öt ígér az adott színből, GF. <strong>3NT</strong>: 12–15 pont, balanced." },
+          { q: "Mit jelez a 2♣ → 2♦ után a nyitó 2NT, 3NT, és 2 nemes rebid?",
+            a: "<strong>2NT</strong>: 22–24 HCP, balanced (Stayman + Jacoby transfer érvényben). <strong>3NT</strong>: 25–27 HCP, balanced, „gamble\" jellegű (passzolható). <strong>2♥/2♠</strong>: 5+ szín a nemesben, F-1 körig. <strong>3♣/3♦</strong>: 5+ lap az alsóból, GF." },
+          { q: "Mit licitálj a 2♣ → 2♥ (dupla negatív) válasz után 22–24 balanced kézzel?",
+            a: "<strong>2NT</strong> — a partner gyakorlatilag passzolja, hacsak nem nagyon shape-es. Dupla negatív után a slam-vadászat nem reális (kivéve önállóan 11+ ütésű kéz). 25–27 balanced esetén 3NT-t mondasz." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Hogyan néz ki pontosan a Smolen konvenció licitsorozata?",
+            a: "1NT → 2♣ (Stayman) → 2♦ (Nyitó tagadja a 4-es nemest) → <strong>3♥ VAGY 3♠</strong>. A 3-as ugrás a <em>rövidebb</em> (4 lapos) nemesben történik, azt üzenve: \"GF vagyok (10+), a másik nemesem 5 lapos.\"" },
+          { q: "Hogyan néz ki pontosan a Crawling Stayman licitsorozata (amikor a partner 2♦-t vagy 2♥-t mond)?",
+            a: "1NT → 2♣ (0-7 pont, 4-4 nemes) → 2♦ (Nyitó tagad) → <strong>2♠</strong>. VAGY 1NT → 2♣ → 2♥ (Nyitó kőrt mutat) → <strong>2♠</strong>. A 2♠ jelentése: \"Van 4 pikkem, de gyenge vagyok, válaszd ki te a fittet (passz v. 3♥).\"" },
+          { q: "Mi a teendő Puppet Stayman (1NT → 3♣) 3♦ válasza után?",
+            a: "A 3♦ azt jelenti, van a nyitónak 4-es nemese (de 5-ös nincs). A segítő <strong>3♥</strong>-vel jelzi: \"Nekem 4 pikkem van, neked van?\" A <strong>3♠</strong>-vel jelzi: \"Nekem 4 kőröm van, neked van?\" (Fordított logika!)" },
+          { q: "Milyen szinteken történhet a Jacoby transzfer szuper-elfogadása (1NT → 2♦ után)?",
+            a: "A 2♥ a sima elfogadás. A szuper-elfogadások: <strong>2NT</strong> (max, pontosan 2 kőr), <strong>3♣/3♦/3♠</strong> (max, 4 kőr, ütésforrás a licitált színben), <strong>3♥</strong> (klasszikus, max, 4 kőr), <strong>4♥</strong> (max, nagyon offenzív)." },
+          { q: "Mutasd be a Lebensohl \"Slow shows, fast denies\" mátrixát 10+ (GF) ponttal 1NT - (2♥) közbeszólás után!",
+            a: "<table><tr><th>Licit</th><th>Jelentés</th></tr><tr><td>Közvetlen 3NT</td><td>GF, <strong>NINCS</strong> kőr stopper</td></tr><tr><td>2NT → 3♣ → 3NT</td><td>GF, <strong>VAN</strong> kőr stopper</td></tr><tr><td>3♥ (Közvetlen cue)</td><td>GF, \"Van stoppered?\"</td></tr><tr><td>Közvetlen 3♠</td><td>GF, 5+ pikk</td></tr></table>" },
+          { q: "Írd le az erős 2♣ → 2♦ (negatív) utáni nyitó rebid lehetőségeket!",
+            a: "<table><tr><th>Nyitó Licit</th><th>Jelentés</th></tr><tr><td>2♥ / 2♠</td><td>5+ lap, F-1 körig (22+ HCP vagy sok ütés)</td></tr><tr><td>2NT</td><td>22-24 HCP balanced (NF, partner passzolhatja)</td></tr><tr><td>3♣ / 3♦</td><td>5+ lap, Game Forcing</td></tr><tr><td>3NT</td><td>25-27 HCP balanced (NF, gamble)</td></tr></table>" },
+          { q: "Írd le az erős 2♣ → 2♥ (dupla negatív: 0-3p, 0 ász/király) utáni nyitó rebid lehetőségeket!",
+            a: "<table><tr><th>Nyitó Licit</th><th>Jelentés</th></tr><tr><td>2♠ / 3♣ / 3♦ / 3♥ / 3♠</td><td>GF, de slem már irreális. A partner várhatóan passzol, amint gémbe érünk.</td></tr><tr><td>2NT</td><td>22-24 HCP balanced. A dupla negatív után a partner passzol.</td></tr><tr><td>3NT</td><td>25-27 HCP balanced. Passzolható.</td></tr></table>" }
+        ]
+      },
+
+      /* 3. SLAMKERESŐ KONVENCIÓK */
+      "slamkereso": {
+        title: "3. Slamkereső konvenciók",
+        description: "Kickback RKC 1430, Exclusion, Specific King Ask, Gerber, DEPO, cuebid kontrollok.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Hány kulcslap van, és mit számolunk kulcslapnak?",
+            a: "<strong>5 kulcslap</strong>: a 4 ász + az <em>adu király</em>. A slam-keresés célja ezek megállapítása. Kis slemhez (32–33+ pont, vagy NT-ben 33+) <em>legalább 4 kulcslap</em> kell az 5-ből." },
+          { q: "Mi a Kickback alapelve, és miben különbözik a klasszikus 4NT Blackwoodtól?",
+            a: "A kulcslap-kérdés a megegyezett aduszín fölötti <strong>legolcsóbb, következő licit a 4-es szinten</strong>, NEM mindig a 4NT. Csapaton belül egységesen a Kickback fut, a Minorwood helyett is. Ha még nem volt megegyezés, a 4-szintű ugrás = megegyezés + ászkérdés egyben." },
+          { q: "Melyik adunál melyik licit a Kickback ászkérdés?",
+            a: "<strong>♠ adu → 4NT</strong>. <strong>♥ adu → 4♠</strong>. <strong>♦ adu → 4♥</strong>. <strong>♣ adu → 4♦</strong>. Mindig az aduszín fölötti legolcsóbb licit." },
+          { q: "Mik az 1430 lépcsők (Kickback / RKC válaszok)?",
+            a: "A kérdő licittől számolva: <strong>1. lépcső</strong>: 1 vagy 4 kulcslap. <strong>2. lépcső</strong>: 0 vagy 3 kulcslap. <strong>3. lépcső</strong>: 2 vagy 5 kulcslap, <em>adu dáma NÉLKÜL</em>. <strong>4. lépcső</strong>: 2 vagy 5 kulcslap, <em>adu DÁMÁVAL</em>." },
+          { q: "Mi az Exclusion Blackwood, és mikor használjuk?",
+            a: "Akkor, ha az aduban megegyeztünk, de van <strong>színhiányunk (void)</strong> egy oldalszínben, és tudni szeretnénk: <em>„Hány kulcslapod van, NEM SZÁMÍTVA az én színhiányos színem ászát?\"</em> Egy szokatlan, <strong>5-ös szintű ugrás új színben</strong> az adu megegyezése után." },
+          { q: "Hogyan válaszol a partner az Exclusion Blackwoodra?",
+            a: "A sima <strong>1430 lépcsőket</strong> használja, de úgy tesz, mintha az Exclusion szín ásza nem létezne. Ha mégis nála van az az ász, akkor azt zérónak értékeli. Példa: 1♠ – 3♠ – 5♣! = „pikk az adu, treff voidom van, mondd a kulcslapokat treff ász nélkül\"." },
+          { q: "Hogyan jelez a SEGÍTŐ void-ot RKC 1430 kérdésre?",
+            a: "<strong>5NT</strong> = páros (0, 2 vagy 4) kulcslap + valamilyen színhiány. <strong>6-os szintű új szín</strong> = void abban a konkrét színben + páros kulcslap-szám. <strong>6 adu</strong> = páratlan kulcslap-szám + színhiány. Így a kérdező pontosan kalkulálhat." },
+          { q: "Mi az 5NT Specific King Ask, mikor és hogyan használjuk?",
+            a: "Miután a Kickbackből kiderült, hogy <strong>megvan az összes kulcslap</strong> (5/5), a kérdező 5NT-t mond → ez a <em>Specific King Ask</em>. A válaszadó <strong>6-os szinten bemondja, melyik konkrét királya van</strong> (pl. 5NT → 6♦ = káró királyom van). Több király esetén a legolcsóbbat. Ha nincs külső királya, visszatér az adu 6-ra." },
+          { q: "Hogyan kérdezed meg az adu dámát RKC válasz után?",
+            a: "A kérdő a <strong>legolcsóbb új színnel</strong> kérdez. A válaszok: <strong>adu visszahívása</strong> = nincs nálam. <strong>5NT</strong> = itt a dáma ÉS nincs másik színből király. <strong>Bármelyik nem adu szín</strong> = itt a dáma ÉS a licitált színből a király." },
+          { q: "Mi a Gerber, mikor és hogyan használod?",
+            a: "<em>„Kickback szan után.\"</em> Csak <strong>1NT/2NT nyitásra</strong> mondható. <strong>4♣</strong> az ászkérdés (válaszok: 4♦=0/4, 4♥=1, 4♠=2, 4NT=3). <strong>5♣</strong> a királykérdés ugyanezzel a lépcsőszerkezettel. Cél: meg lehessen állni 4 vagy 5 szanon, ha nincs slem. Ezért az 1NT – 4NT kvantitatív, nem ászkérdés!" },
+          { q: "Mi a DEPO, és mikor használjuk?",
+            a: "<strong>D</strong>ouble = <strong>E</strong>ven, <strong>P</strong>ass = <strong>O</strong>dd. Ha közbeszóltak az ászkérdésünkre: <strong>kontra (X)</strong> = 0, 2 vagy 4 ász (páros). <strong>Passz</strong> = 1 vagy 3 ász (páratlan)." },
+          { q: "Mi az 1. és 2. körös kontroll a cuebid rendszerben?",
+            a: "<strong>1. körös kontroll</strong> = <em>ász vagy void</em> (az első ütésből 0 megy el). <strong>2. körös kontroll</strong> = <em>király vagy szingli</em> (az első ütésből 1 megy el, a másodikból már 0). A megegyezett ász (vagy adu) után a legolcsóbb meg nem mutatott kontrollt mutatjuk." },
+          { q: "Mi az Italian-style cuebid, és miben különbözik a klasszikus amerikai stílustól?",
+            a: "Az olasz stílusban az <strong>1. és 2. körös kontroll keverten</strong> mutatható. Az amerikai stílusban csak az 1. körös kontrollt mutatják először. Ha átugorsz egy színt a cuebid sorozatban, az azt jelenti, hogy abban a színben <em>nincs kontrollod</em>." },
+          { q: "Mit jelent, ha a partner cuebid-et csinált egy színben?",
+            a: "<strong>Implicit megegyezést jelent az aduban</strong> — onnantól a folytatás bármilyen 4-es szintű cuebid kontrollt ígér. A cuebid sorozat csak akkor működik, ha az adu meg van állapodva (akár implicit módon)." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Mutass egy pontos licitsorozatot Exclusion Blackwoodra!",
+            a: "1♠ – 3♠ (Limit raise: 10-12, 4-fit) – <strong>5♣!</strong>. Az 5♣ jelentése: \"Pikk az adu, treff voidom van, mondd a kulcslapokat az RKC 1430 szerint, a treff ász beszámítása NÉLKÜL!\"" },
+          { q: "Mutass egy pontos licitsorozatot Specific King Ask-ra!",
+            a: "1♥ – 2NT (Jacoby) – 4♠ (Kickback RKC) – 5♣ (1 vagy 4 kulcslap) – <strong>5NT!</strong>. Az 5NT jelenti: \"Minden kulcslap megvan. Hol vannak az oldalsó királyaid?\" Válasz pl: <strong>6♦</strong> = \"A káró király nálam van\"." }
+        ]
+      },
+
+      /* 4. SLAM- ÉS GAME-ERŐ MEGBESZÉLÉSE */
+      "slam-game-ero": {
+        title: "4. Slam- és game-erő megbeszélése",
+        description: "Law of Total Tricks, Drury, Western Cue bid, Splinter, Fourth suit forcing.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Mi a Law of Total Tricks alapelve?",
+            a: "<strong>Total Tricks ≈ Total Trumps</strong> (mi + ők együtt). Az aduszám határozza meg a biztonságos szintet: <strong>8 adu = 2-es szint, 9 adu = 3-as szint</strong>, stb. Példa: ha nálunk 9 pikk + náluk 8 kőr van, összesen ~17 ütés lehet — nem érdemes 3♠-nál fennebb védekezni 3♥ ellen, ha 9-9 a fit-eloszlás." },
+          { q: "Mi a Drury konvenció, és mikor használjuk?",
+            a: "Ha 3. vagy 4. helyen ülsz, a partner nyithat <em>„könnyített\"</em> (10–11 pont) taktikai 1♥/1♠ licittel. Ha te már passzoltál (max 11 pont), <strong>3+ lapos fittel + invitáló (10–11) kézzel</strong> nem emelhetsz rögtön 3-as szintre — el fogtok bukni, ha könnyített nyitás volt. Megoldás: a Reverse Drury 2♣." },
+          { q: "Hogyan reagál a könnyített nyitó a Reverse Drury 2♣-re?",
+            a: "<strong>2♦</strong>: „Igazi, teljes értékű nyitásom van (12+ pont), mehetünk gémre!\" <strong>A saját nemesének megismétlése (2♥/2♠)</strong>: „Bocs, ez csak könnyített nyitás volt, álljunk meg itt, nincs gém.\"" },
+          { q: "Mi a Western Cue bid, és mikor mondod be?",
+            a: "Amikor egyértelmű, hogy <strong>3NT a célunk</strong>, de van egy „veszélyes\" szín az ellenfélnél, amiben nincs fogásunk (stopperünk). Megoldás: <strong>licitáljuk be az ellenfél színét</strong>. Jelentés: „Partner, megvan a 3NT-pontunk, de NINCS stopperem a közbeszólt színben. Neked van?\"" },
+          { q: "Mi a különbség Western Cue bid és Michael's Cue bid között?",
+            a: "<strong>Western Cue</strong>: <em>későbbi, reagáló</em> fázisban, már épülő szekvenciában, stopper-érdeklődés. <strong>Michael's</strong>: <em>azonnal, az első adandó alkalommal</em> licitáljuk az ellenfél színét — kétszínű 5-5 jelzés (két szín kombináció)." },
+          { q: "Mi a Splinter, és mit jelez?",
+            a: "<strong>Dupla ugrás új színben</strong>: egy van a licitált színből (singleton vagy void), és <strong>12+ pontot</strong> ígér. Slem-kutatás. Példa: 1♠ → 4♦ = „4 pikkem van, 12+ HCP, és káróból egykém vagy színhiányom van\"." },
+          { q: "Miért lehet rossz hír a Splinter, ha az egyetlen lap az adott színben az ász?",
+            a: "Mert <strong>duplán számít az értékkel</strong>: az ász már a HCP-ben szerepel, a shortness pedig még +2 pontot adna — de ezek nem additívek! A splinter értéke abból fakad, hogy a partner el tudja dobni a kiadóit a saját kezéből. Az ász szingli nem ad ilyen lehetőséget. Splinter helyett inkább Jacoby 2NT érdemes ász-singletonnal." },
+          { q: "Mi a Fourth suit forcing, és mikor használjuk?",
+            a: "Egy licitsorozatban a <strong>negyedik szín bemondása</strong> (1♣ – 1♥ – 1♠ – 2♦) mesterséges, <em>forcing</em>. Cél: ne kelljen a negyedik szín ismerete nélkül 3NT-t játszani — mondj valami extrát a shape-edről. Feltétel: legalább <strong>13 pont</strong> segítőként (GF)." },
+          { q: "Tévedési veszély: mit jelent a 4. szín ha valódi, természetes színed van?",
+            a: "Ez <strong>tévedés!</strong> A 4. szín automatikusan forcing — nem természetes. Ha valódi káród van és sign-off-ot akarsz, először Stayman-szerű licitálás vagy NT-re emelés érdemes. A 4. szín = „mondj még valamit, nem értek egyet a NT-vel\"." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Írd le a Reverse Drury pontos licitsorozatát passzolt segítővel!",
+            a: "<strong>Passz</strong> (Segítő) – Passz – <strong>1♥</strong> (Nyitó, 3. v. 4. hely, taktikai) – Passz – <strong>2♣!</strong>. A 2♣ a Reverse Drury: \"10-11 pontom és 3+ kőröm van\". Nyitó erre: 2♦ = igazi nyitás. 2♥ = gyenge taktikai, álljunk meg." },
+          { q: "Mondj egy konkrét példát a Fourth Suit Forcing (4SF) tévesztésére!",
+            a: "1♣ – 1♥ – 1♠ – <strong>2♦</strong>. Ha a 2♦-t azért mondod, hogy <em>természetes</em> káró színt mutass be (pl. 5 káród van, de gyenge a kezed), az <strong>végzetes hiba</strong>. A 4. szín itt GF-et és 3NT tapogatózást indít!" }
+        ]
+      },
+
+      /* 5. OVERCALLOK ÉS KOMPETITÍV LICITEK */
+      "overcallok": {
+        title: "5. Overcallok és kompetitív licitek",
+        description: "Overcall típusok, take-out / power / support / two-suited double, Cappelletti, Michaels, Unusual.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Mi az 1-es és 2-es szintű színes overcall pont- és szín-minőség követelménye?",
+            a: "<strong>1-es szint</strong> (pl. 1♣ – 1♠): 8–17 HCP, 5+ lap, <em>2 honor</em> (KQxxx, AJxxx, KJTxx). Legszélesebb tartomány. <strong>2-es szint</strong> (pl. 1♠ – 2♣): 11–17 HCP, 5+ lap (általában 6), <em>3 honor</em> vagy 6+ lap. Diszciplináltabb." },
+          { q: "Mi a gyenge ugró overcall (modern stílus)?",
+            a: "<strong>1♣ – 2♠</strong> stílusban: <strong>6–10 HCP, 6+ lap, jó szín</strong> (2 honor). „Erős, 1-szintű nyitást megelőző gyenge 2-es\" mintájára. A legtöbb modern páros gyenge-ugrást játszik. A klasszikus erős ugró overcall (16+) csak megegyezéses." },
+          { q: "Mit ígér az 1NT overcall és a 2NT overcall?",
+            a: "<strong>1NT overcall</strong> (pl. 1♣ – 1NT): <em>15–18 HCP</em>, balanced, <strong>biztos stopper</strong> a közbeszólt színben. Stayman + transfer érvényben (mint sima 1NT nyitás után). <strong>2NT overcall</strong>: NEM természetes — <strong>Unusual 2NT</strong>, két alsó szín (5-5)." },
+          { q: "Mi a take-out double feltétele, és hogyan válaszol a partner?",
+            a: "<strong>12–15 (11+) HCP</strong>, 3-3 lap minden be nem mondott színből. A partnernek kötelező válaszolnia: <em>Passz</em> = 0–6, ellenfél színe nálunk hosszú (büntető). <em>Alacsony szín</em> = 0–9. <em>Ugrás színben</em> = 10–12, invitáló. <em>Cue bid</em> = 13+, Game Forcing." },
+          { q: "Mi a Power Double, és hogyan derül ki a második körben?",
+            a: "<strong>16+ HCP</strong>-vel a standard take-out double, de erősebb kéz. A második licit fedi fel: <em>Új szín</em> = 16–18, erős 5+ lapos. <em>1NT</em> = 19–21, balanced, stopper. <em>2NT ugrással</em> = 22–24, balanced. <em>Partner színének emelése</em> = 16+, 4+ lap fit a partner színében." },
+          { q: "Mit jelent a take-out double 4-es magasan (pl. (4♥) – X)?",
+            a: "<strong>Cooperative take-out</strong>, nem tisztán büntető. 12+ HCP (általában 14+), 0–2 a kontrázott színben, 3+ minden másik színben. A partnernek el kell tudni dönteni passz / 4♠ / 5♣ / 5♦ között." },
+          { q: "(4♠) – X mikor és miért penalty, nem takeout?",
+            a: "Mert a saját 4♠ közbeszólás már túl drága lenne. <strong>(4♥) – X</strong>: takeout. <strong>(4♠) – X</strong>: <em>penalty</em>. <strong>(4♣) – X és (4♦) – X</strong>: takeout, 3-3-3 a többi színben." },
+          { q: "Mi az újranyitó (reopening) kontra, és mikor mondod be?",
+            a: "Amikor a licit kezd „elhalni\" az 1-es szinten. Példa: 1♣ – Passz – Passz – <strong>X!</strong> — a te partnered passzolt → kevés pontja van, így a többi pontunk az asztalon. Követelmény: <strong>8–14 pont és rövidség az ellenfél nyitott színében</strong>." },
+          { q: "Mi a büntető passz (penalty pass) reopening double után?",
+            a: "Amikor a passzoló partner az újranyitó kontrát passzal hagyja meg — akkor érdemes, ha az ellenfél nyitott színéből <em>rettentő hosszú, gyönyörű lapja</em> van, amivel alacsony szinten, kontrázva megbuktathatja a felvevőt!" },
+          { q: "Mi a Support Double, és mit ígér pontosan?",
+            a: "Helyzet: te nyitottál színt, a partner új színt válaszolt 1-es szinten, az ellenfél közbeszólt a partner színe FÖLÉ. A te <strong>X kontrád pontosan 3 lapos fitet ígér</strong> a partner színében (a 4 lapos fit egyszerű 2-es emelés). Példa: 1♣ – Passz – 1♥ – 1♠ – <strong>X</strong> = pontosan 3 köröm." },
+          { q: "Mit jelez a Support Redouble (XX), és mikor használjuk?",
+            a: "Ha az ellenfél kontrázta a partner válaszát (nem új színt mondott): <strong>XX = pontosan 3 lapos fit</strong> a partner színében. <strong>Raise (2♥) = 4 lapos fit</strong>. Hasonló logika, mint a Support Double — pontosan kiderül a fit hossza." },
+          { q: "Mi a Two-suited Double általános elve?",
+            a: "Ha az ellenfél <em>kétszínű</em> konvenciót használ (Cappelletti, Michaels, DONT, Unusual NT), a saját X és cue-bid <strong>specifikus üzeneteket</strong> kap: <strong>X</strong> = kártyák / penalty az egyik konkrét színre. <strong>Cue (alsó)</strong> = GF, nincs stopper. <strong>Cue (felső)</strong> = GF, van stopper." },
+          { q: "Mit jelez a rekontra (XX) saját nyitásod take-out kontrázása után?",
+            a: "<strong>10+ HCP, nincs 4+ adu</strong> (különben Jordan vagy splinter). Egy körig forcing. A partner <em>nem mondhat passzot</em>, hacsak nem büntető-kontrázni akarja a következő ellenfél licitet. Általában büntető szándékkal „megvédjük\" a partnerséget." },
+          { q: "Mi az SOS XX (menekülő rekontra)?",
+            a: "Amikor partneredet <em>büntető-kontrázták</em> és menekülni akarsz. Példa: 1NT – (X penalty) – ?? – (Passz) – <strong>XX</strong> = SOS, „válassz színt!\". Vagy 3-as szint felett, vagy 4-es szinten — gyenge kéz, kéri a partnert új színt választani." },
+          { q: "Mi a 2NT Lebensohl relay funkciója saját gyenge 2-es nyitásra adott takeout double után? (Pl. 2♥ – (X) – 2NT – ?)",
+            a: "A partnernek kötelezően <strong>3♣</strong>-t kell mondania, és onnan a válaszadó folytatja: <em>Passz</em> = gyenge, sign-off 3♣-ban. <em>3♦/3♠</em> = 6+ lap, sign-off. <em>3♥ (cue)</em> = GF, fit-érdeklődés. <em>3NT</em> = 10+, balansz, stopperrel. <em>4♥</em> = 4+ kőr fit, slam-irány." },
+          { q: "Mi a Michael's Cue bid (közbeszólásként)?",
+            a: "Az ellenfél nyitása után <strong>az ő színének közvetlen licitálása</strong>: <em>kétszínű 5-5</em> jelzés. Ha minor volt a nyitás (pl. 1♣ – 2♣): 5-5 a nemesekben. Ha nemes volt (pl. 1♠ – 2♠): 5-ös a másik nemes + 5-ös az egyik minor. 10+ pont." },
+          { q: "Mi az Unusual 2NT, és mit jelez?",
+            a: "A <strong>két leggyengébb be nem mondott szín</strong> (jellemzően a két minor) <strong>5-5 lapos fittje</strong>, 10+ pont. Példa: 1♠ – 2NT = 5-5 a két alsóban. Ellenfél megzavarására." },
+          { q: "Mi az „Unusual vs Unusual\" védekezés a ránk irányuló Unusual 2NT ellen?",
+            a: "Példa: mi 1♠, ellenfél 2NT (két alsó). Válaszok: <em>X kontra</em> = büntető, 10+ HCP, megfogja az alsóikat. <em>Alsó cue (3♣)</em> = invitáló limit raise a mi nemesünkben. <em>Magasabb alsó cue (3♦)</em> = GF emelés a mi nemesünkben. Ha a nyitónak nem tetszik az invitáció: 3♠ sign-off." },
+          { q: "Mit jelez a Cappelletti 2♣, 2♦, 2♥ és 2♠ közbeszólás az ellenfél 1NT-jére?",
+            a: "<strong>2♣</strong>: egyszínű kéz (11–14 pont). Segítő relay 2♦-t mond, az overcaller bemondja az igazi színét. <strong>2♦</strong>: <em>mindkét nemes</em> (5-4 vagy 4-5). Segítő a több lapot tartalmazó nemest mondja. <strong>2♥</strong>: <em>kőr és egy alsó</em> (5-5). <strong>2♠</strong>: <em>pikk és egy alsó</em> (5-5)." },
+          { q: "Hogyan kérdezi a segítő az Cappelletti 2♥ vagy 2♠ után az alsó színt, ha gyűlöli a nemest?",
+            a: "<strong>2NT</strong>-vel megkérdezi, melyik az alsó. Pl. 2♥ után: ha szereti a kőrt → passz; ha gyűlöli (0-1 lap) → 2NT → az overcaller bemondja az alsót." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Mi a Power Double (16+ HCP) 2. körös licitjei a következő után: 1♦ - (X) - Passz - 1♠ - Passz - ?",
+            a: "<table><tr><th>2. Licit</th><th>Jelentés</th></tr><tr><td>2♥</td><td>16-18 pont, erős 5+ kőr.</td></tr><tr><td>1NT</td><td>19-21 HCP, balanced, van káró stopper.</td></tr><tr><td>2NT</td><td>22-24 HCP, balanced, van káró stopper.</td></tr><tr><td>2♠ v. 3♠</td><td>16+ HCP és minimum 4 lapos pikk fit (partner színének emelése).</td></tr></table>" },
+          { q: "Írd le a Support Double pontos licitsorozatát!",
+            a: "<strong>1♣</strong> (Én nyitok) – Passz – <strong>1♥</strong> (Partner válaszol) – <strong>1♠</strong> (Ellenfél közbeszól) – <strong>X!</strong>. Ekkor a X jelentése: \"Partner, pontosan 3 lapos kőr fittem van.\" (A 2♥ emelés 4 lapos fittet ígérne)." },
+          { q: "Mutass egy SOS rekontra (menekülő XX) szituációt!",
+            a: "<strong>1NT</strong> (Én) – <strong>X</strong> (Ellenfél, Penalty!) – Passz (Partner vár) – Passz (Ellenfél passzol, hogy büntessen) – <strong>XX!</strong>. Jelentés: \"SOS, nagyon rossz az 1NT, kérlek válassz színt (Stayman/Transfer analógia).\"" },
+          { q: "Írd le az Unusual vs Unusual védekezés pontos menetét, ha a nyitás 1♠ és a közbeszólás 2NT (alsók) volt!",
+            a: "<table><tr><th>Segítő licitje</th><th>Jelentés</th></tr><tr><td>X (Kontra)</td><td>Büntető, 10+ HCP, megfogom az alsóikat.</td></tr><tr><td>3♣ (Alsó cuebid)</td><td>Invitáló limit raise (10-12p) pikkben.</td></tr><tr><td>3♦ (Magasabb cuebid)</td><td>Game Forcing (13+p) emelés pikkben.</td></tr></table>" },
+          { q: "Részletezd a Cappelletti 2♣ (egyszínű) védekezés teljes licitsorozatát 1NT ellen!",
+            a: "(1NT) – <strong>2♣</strong> (Közbeszólás: egyszínű kéz, 11-14p) – (Passz) – <strong>2♦!</strong> (Partner kötelező relay-e) – (Passz) – <strong>2♥ / 2♠ / 3♣ / 3♦</strong> (A közbeszóló bemondja a tényleges 6+ lapos színét)." }
+        ]
+      },
+
+      /* 6. ELLENJÁTÉK (JELZÉSEK) */
+      "ellenjatek": {
+        title: "6. Ellenjáték (jelzések)",
+        description: "Upside-down attitude, count és suit-preference jelzések.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Milyen jelzési rendszert használunk, és mi a fő alapelve?",
+            a: "<strong>Upside-down</strong> rendszer — minden konvenció megfordítva játszik a klasszikushoz képest. Encourage = kicsi lap (nem nagy). Páros = kicsi lap. Suit-preference: a kicsi a legolcsóbb, a nagy a legdrágább színre vált." },
+          { q: "Hogyan jelzed upside-down rendszerben az ATTITUDE-ot: bátorítás vs. elbátortalanítás?",
+            a: "<strong>Encourage (bátorítás)</strong>: kicsit dobok, majd nagyot. <strong>Discourage (elbátortalanítás)</strong>: nagyot dobok, majd kicsit. Az első lap a kritikus — a megszokott „nagy bátorítás\" itt fordítva van." },
+          { q: "Hogyan jelzed upside-down rendszerben a COUNT-ot: páros vs. páratlan?",
+            a: "<strong>Páros</strong>: kicsi lapot dobsz. <strong>Páratlan</strong>: nagy lapot dobsz. Ez fontos, ha követni kell, vagy ha a partner ki kell tudja számolni a maradék lapokat. Szanban: az első nem-honor ütésnél a kicsi lap a count-ot adja, nem az attitude-ot." },
+          { q: "Hogyan jelzed a SUIT-PREFERENCE-et?",
+            a: "<strong>Kicsi lap</strong> = olcsóbb színre válts. <strong>Nagy lap</strong> = drágább színre válts. Tipikus helyzet: amikor a partner mindjárt át kell térjen egy színváltásra, és nem nyilvánvaló, melyikre kéne." },
+          { q: "Mit jelez az indítólap szan ellen, illetve színjáték ellen?",
+            a: "<strong>Szan ellen</strong>: a leghosszabb színből a <em>4. legnagyobb lap</em>, vagy honor sequence tetejéből (pl. KQJx). <strong>Színjáték ellen</strong>: színhiányból próbálunk nyitni (amiből 1-2 van), általában előbb a nagyobb lap. Normál esetben illik visszahívni a partner színét." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Ha a partner ♥A-val indul és az asztalon a ♥KQ van, milyen szignált adsz a ♥2-es lappal upside-down-ban?",
+            a: "Mivel a legkisebb lapod a kettes, ez <strong>Attitude - Encourage (Bátorítás)</strong>. Jelentése: \"Partner, játssz még kőrt, jó nekem (pl. hiány van vagy aduvágást tervezek)!\"" },
+          { q: "Mi a jelzések alapvető prioritási sorrendje, amikor a partner indít egy színt?",
+            a: "<strong>1. Attitude (Bátorítás/Elbátortalanítás):</strong> Ez az elsődleges. („Folytasd ezt a színt, vagy válts!\") <strong>2. Count (Számozás)</strong>: Csak akkor adjuk, ha az attitude már egyértelmű vagy irreleváns (pl. asztalon szingli van, és a partner Ászt hívott). <strong>3. Suit-preference (Szín-preferencia)</strong>: Csak akkor, ha sem az attitude, sem a count nem releváns (pl. partner aduvágást ad neked, és tudni akarja, milyen színben gyere vissza a kezedből)."},
+          { q: "Mi a fő különbség az első jelzés céljában szan (NT) szerződés, illetve színjáték ellen?",
+            a: "<strong>Színjáték</strong> ellen a partner indítására az elsődleges jelzés szinte mindig az <strong>Attitude</strong> (upside-down: kicsi bátorít). <strong>Szanban</strong> ha az első ütés egy <strong>honor ütés</strong> (honorral indultok), akkor a válasz rá <strong>attitude</strong>, ha <strong>nem-honor ütés</strong> (4. legnagyobb lap hosszú színből), akkor <strong>Count-ot</strong> (számozást) adunk, nem attitude-öt. (Hiszen ilyenkor a közös laphosszúság feltérképezése kritikusabb)."},
+          { q: "Milyen jelzést adsz, amikor nem a partner, hanem a felvevő (vagy az asztal) hív meg egy új színt?",
+            a: "Ilyenkor <strong>Count</strong> (Számozás) jelzést adunk (upside-down: kicsi lap = páros, nagy lap = páratlan). Az attitude itt értelmetlen, hiszen a felvevő színéről van szó; a cél az, hogy a partnerünk ki tudja számolni, hány lapja van a felvevőnek abból a színből (LFP-O számolás!)."},
+          { q: "Milyen típusú jelzést adsz az első eldobásodnál (amikor először nem tudsz színt követni)?",
+            a: "Az első eldobás alapvetően Attitude jelzés arra a konkrét színre, amit épp eldobsz. Upside-down rendszerben egy kicsi lap eldobása bátorít (vagyis kéri azt a színt a partnertől), míg egy nagy lap eldobása határozottan elbátortalanít."},
+          { q: "Mikor használunk kizárólagosan <em>suit-preference</em> (szín-preferencia) jelzést?",
+            a: "Akkor, ha a partner számára teljesen egyértelmű, hogy a hívott színt <strong>NEM szabad (vagy nem lehet) folytatni</strong>. A dobott lap nagysága megmondja, hogy a maradék két szín közül melyikre váltson (Nagy lap = drágább szín, Kicsi lap = olcsóbb szín)." },
+          { q: "Hogyan működik a suit-preference jelzés aduvágás (ruff) adásakor? Mondj példát!",
+            a: "A hívott kártya nagysága mutatja a visszatérési színt egy újabb lopáshoz. <em>Példa:</em> Pikk adu, partnernek káró szinglije volt. Ha a <strong>♦9</strong>-est hívod neki lopásra: <em>„Lopd el, és gyere vissza a drágább színben (KŐR)!”</em> Ha a <strong>♦2</strong>-est: <em>„Gyere vissza az olcsóbb színben (TREFF)!”</em>" },
+          { q: "Suit-preference jelzést adsz, ha a partner indított, de az asztalon szingli/hiány van abból a színből. Mondj erre egy példát!",
+            a: "Mivel a szín folytatása öngyilkosság (a felvevő lopna), a dobott lapod SP jelzés. <em>Példa (kőr adu):</em> Partner ♠K-val indul, asztalon ♠ szingli. Ha a <strong>♠8</strong>-ast adod a királya alá: <em>„Válts a drágább színre (KÁRÓ)!”</em> Ha a <strong>♠2</strong>-est: <em>„Válts az olcsóbb színre (TREFF)!”</em>" },
+          { q: "Suit-preference jelzést adsz reménytelen asztali tartásnál (obvious shift, amikor a színből erős az asztal). Mondj erre egy példát!",
+            a: "Ha a partner pl. ♣A-val indít NT ellen, de az asztalon ♣KQJ10 fekszik, nyilvánvalóan váltania kell. A te treff dobásod (harmadik kézből) SP-ként funkcionál a maradék színekre: nagy treff dobása = drágább színre válts (pikk), kis treff dobása = olcsóbb színre válts." }
+        ]
+      },
+
+      /* 7. PONTOZÁS */
+      "pontozas": {
+        title: "7. Pontozás",
+        description: "Sebezhetőség, ütésenkénti pontok, bónuszok, kontrázott és rekontrázott bukás.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Hogyan oszlik a sebezhetőség (vulnerability) a licitkezdő szerint?",
+            a: "<strong>North</strong>: mindenki <em>mans</em> (nem sebezhető). <strong>East</strong>: N/S mans, W/E <em>bell</em> (sebezhető). <strong>South</strong>: N/S bell, W/E mans. <strong>West</strong>: mindenki bell. Ezt fontos tudni az áldozási és preempt-döntésekhez." },
+          { q: "Mennyi az ütésenkénti pont nem nemes, nemes, és szan vállalásban?",
+            a: "<strong>Nem nemes (♣, ♦)</strong>: 20 pont / ütés. <strong>Nemes (♥, ♠)</strong>: 30 pont / ütés. <strong>Szan (NT)</strong>: első ütés 40 pont, további ütések 30 pont." },
+          { q: "Mennyi a game prémium mans és bell esetén?",
+            a: "<strong>Mans (nem sebezhető)</strong>: 300 pont. <strong>Bell (sebezhető)</strong>: 500 pont. A teljesített partial: 50/50 (résrekord), nem game-prémium. Game-hez 100+ ütés-pont kell egy körben (pl. 3NT, 4♥/♠, 5♣/♦)." },
+          { q: "Mennyi a kis és nagy slem prémium mans/bell helyzetben?",
+            a: "<strong>Kis slem</strong> (6-os szint, a game bónuszon felül): mans 500 / bell 750 pont. <strong>Nagy slem</strong> (7-es szint, a game bónuszon felül): mans 1000 / bell 1500 pont." },
+          { q: "Mennyi a bukás kontra nélkül mans és bell helyzetben?",
+            a: "Egyszerű: <strong>50 pont / ütés mans</strong>, <strong>100 pont / ütés bell</strong>. Tehát egy 2-es bukás bellben = 200, mansban = 100. Ezek a sima preempt-áldozás kalkulációi." },
+          { q: "Mennyi a kontrázott bukás 1., 2., 3., és további ütésért mans / bell esetén?",
+            a: "<strong>1. ütés</strong>: 100 / 200. <strong>2. ütés</strong>: 200 / 300. <strong>3. ütés</strong>: 200 / 300. <strong>4. és további</strong>: 300 / 300 minden további ütésért. Tehát kontrázott bellben már egy 2-es bukás 500 pont (200+300)." },
+          { q: "Mennyi a rekontrázott bukás, és hogyan számoljuk?",
+            a: "A kontrázott bukás-értékek <strong>duplázódnak</strong>: 1. ütés 200/400, 2. ütés 400/600, 3. ütés 400/600, 4.+ ütés 600/600. Ezért rendkívül veszélyes egy SOS XX-et rosszul időzíteni." },
+          { q: "Hogyan hat a kontra a vállalás teljesítésére?",
+            a: "Megduplázza az <em>alap ütések</em> és <em>bukások</em> értékét. Teljesítésért jár az <strong>insult bonus</strong>: 50/100 pont (mans/bell). De <strong>NEM duplázza</strong> a gém-, kis- és nagyszlem-prémiumokat — azok a vállalás szintje alapján járnak változatlanul." },
+          { q: "Hogyan hat a rekontra a vállalás teljesítésére?",
+            a: "<strong>Négyszerezi</strong> az alap ütések és bukások értékét. Teljesítésért insult: 100/200 pont. De <strong>NEM négyszerezi</strong> a gém-, kis- és nagyszlem-prémiumokat — ezek az alapszintekkel megegyező értékben járnak." },
+          { q: "Mi az „insult bonus\" pontos jelentése?",
+            a: "A teljesített kontrázott vagy rekontrázott vállalásért külön bónusz, mert „az ellenfél meg merte sérteni a vállalást a kontrával\". <strong>50 pont</strong> teljesített kontrázott vállalásért, <strong>100 pont</strong> rekontrázottért. Ez plusz a megduplázott / megnégyszerezett ütésértékre." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Foglald össze táblázatban a kontrázott bukás pontértékeit (Mans vs Bell) 4 bukásig!",
+            a: "<table><tr><th>Bukás (ütés)</th><th>Mans (Nem seb.)</th><th>Bell (Seb.)</th></tr><tr><td>1. ütés</td><td>100</td><td>200</td></tr><tr><td>2. ütés</td><td>200 (össz: 300)</td><td>300 (össz: 500)</td></tr><tr><td>3. ütés</td><td>200 (össz: 500)</td><td>300 (össz: 800)</td></tr><tr><td>4. ütés</td><td>300 (össz: 800)</td><td>300 (össz: 1100)</td></tr></table>" },
+          { q: "Foglald össze táblázatban a rekontrázott bukás pontértékeit (Mans vs Bell) 3 bukásig!",
+            a: "<table><tr><th>Bukás (ütés)</th><th>Mans (Nem seb.)</th><th>Bell (Seb.)</th></tr><tr><td>1. ütés</td><td>200</td><td>400</td></tr><tr><td>2. ütés</td><td>400 (össz: 600)</td><td>600 (össz: 1000)</td></tr><tr><td>3. ütés</td><td>400 (össz: 1000)</td><td>600 (össz: 1600)</td></tr></table>" }
+        ]
+      },
+
+      /* 8. LEJÁTSZÁSI TAKTIKÁK */
+      "lejatszasi-taktikak": {
+        title: "8. Lejátszási taktikák",
+        description: "Endplay, squeeze családok, coup-ok, avoidance, safety play, hold-up, communication, counting.",
+        cards: [
+          /* --- EREDETI KÁRTYÁK --- */
+          { q: "Mi az endplay (kényszerkijátszás) lényege?",
+            a: "Az ellenfelet olyan helyzetbe kényszerítjük (<em>throw-in</em>), hogy bármit játszik, ütést ad nekünk: vagy az adusora tetejét, vagy a saját stopper-színünket vezeti, esetleg ruff-and-discard-ot ad. Az ellenfél „önmagát finiszeli\" — a kényszer-finesz 100%-os." },
+          { q: "Mik az endplay tipikus elemei?",
+            a: "<strong>Throw-in card</strong>: az a lap, amellyel beadjuk az ellenfelet (pl. ász vagy király kihajítva). <strong>Endplay-állás</strong>: az ellenfélnek csak olyan színe maradt, amelyikbe vezetni rossz. <strong>Eliminációs lejátszás</strong>: a „semleges\" színek (pl. dupla-dupla) kihúzása, hogy ne tudjon mibe menekülni." },
+          { q: "Mi a squeeze egyetlen kulcsmondata? (BLUE-CASH összefoglaló)",
+            a: "<em>„Ha az ellenfélnek 1 ütése maradhat, és én 2 fenyegetést tartok két különböző színben, akkor a squeeze card lejátszása után az ellenfélnek dönteni kell — és minden döntése rossz.\"</em>" },
+          { q: "Mi a 4 alapfeltétel egy squeeze-hez?",
+            a: "(1) <strong>Count rectification</strong>: az ütésszám pontosan 1-gyel kevesebb legyen a cél értéknél („one trick short\"). (2) <strong>Two threats</strong>: két különböző színben fenyegető kártya. (3) <strong>Communication</strong>: a fenyegetésekhez vezető átmenet végig megmaradjon. (4) <strong>Squeeze card</strong>: az a lap, amely lejátszásánál a védő kénytelen valamit eldobni." },
+          { q: "Mi a simple squeeze, és mi a különbség positional vs. automatikus között?",
+            a: "<strong>Simple squeeze</strong>: egy ellenfél, két szín, egy fenyegetés mindkét színben. <strong>Positional</strong>: csak akkor működik, ha a védő egy konkrét irányból ül (általában a fenyegetés-szín kéz ELŐTT). <strong>Automatikus</strong>: akármelyik védőnél van a stopper, működik — mindkét oldalon fenyegetés." },
+          { q: "Mi a Vienna coup, és mit oldjon meg?",
+            a: "Egy <strong>előkészítő technika</strong>: amikor a fenyegetés-szín fő ütése (ász) a felvevő kezében van, és „blokkolja\" a saját fenyegetését. Mnemonika: <em>„Cash the ace, blow the threat, then squeeze.\"</em> Az ász kihúzása felszabadítja a fenyegetést, mert a védőnek immár nincs „önmagát védő\" módja arra a színre." },
+          { q: "Mi a double squeeze, és milyen helyzet kell hozzá?",
+            a: "<strong>Mindkét ellenfél squeeze-elve</strong>: van egy <em>közös szín</em>, amelyet csak az egyik ellenfél tud védeni, és két másik szín, amelyek külön-külön a másik ellenfelet érintik. A squeeze card lejátszásánál nyugat egy fenyegetést véd → kelet kénytelen a közös fenyegetést — így mindkettő egyszerre szorul." },
+          { q: "Mi a criss-cross squeeze sajátossága?",
+            a: "Egyazon ellenfél, két fenyegetés, mindkét fenyegetés A-x-szel a felvevőnél vagy dummyban (azaz „blokkolt\"). Mindkét oldalon szükség van Vienna coup-szerű előkészítésre, de <strong>átlósan</strong>: a kezünkben lévő ász a dummy fenyegetését szabadítja fel, és fordítva. A nehézség a kommunikáció: <em>a játék sorrendje kritikus</em>." },
+          { q: "Mi a trump squeeze, és mikor működik?",
+            a: "Az aduszín maga az egyik fenyegetés / lehívó eszköz. Akkor működik, ha: (1) a felvevő kéz vagy dummy aduja még el tud venni egy oldalszínű ütést (<em>ruff fenyegetés</em>). (2) Az ellenfél vagy az adut őrzi, vagy az oldalszín fenyegetést — egyszerre nem mehet." },
+          { q: "Mi a strip squeeze (squeeze-without-the-count) lényege?",
+            a: "Az endplay és a squeeze <strong>hibridje</strong>. Akkor használjuk, amikor a count NINCS igazítva (nem 1 ütés híján vagyunk). A védő egyszerre kénytelen: <em>(a)</em> egy fenyegetést védeni VAGY <em>(b)</em> egy „menekülő\" lapot megtartani, ami throw-in kard — mert ha eldobja, endplay-be hajtjuk. Mindenképp veszít." },
+          { q: "Mi a compound squeeze?",
+            a: "Több (általában 3) fenyegetés <strong>egyetlen szekvenciában</strong>: az első squeeze a védőt egyik oldalon kényszeríti dobásra, ami felszabadít egy második squeeze-t ugyanazon (vagy másik) védő ellen. Az első squeeze card lejátszása után a kötelező dobás felfedi a kéz struktúráját, és a felvevő azonnal kihasználja egy második squeeze-szel." },
+          { q: "Mi a guard squeeze?",
+            a: "Egy védő egyszerre kénytelen <strong>védeni egy fenyegetést ÉS megtartani egy „őr\" lapot</strong> (general-purpose guard), ami a partnerét óvja egy finesztől. Mindkettő nem fér el a kezében — squeeze! Ha eldobja az őrt → finesz nyer. Ha eldobja a fenyegetést → fenyegetés üt." },
+          { q: "Mi a trump coup, és mire való?",
+            a: "A felvevőnek elfogyott az aduja, de az ellenfélnél még van magas adu. Cél: az utolsó ütések olyan állásban érjék az ellenfelet, hogy az adu-ütését <em>oldalszínű lehívásra kelljen elköltenie</em>. Tipikus: szándékos ruff-okkal „fogyatjuk le\" magunkat, hogy az adusoraink azonos hosszúak legyenek az ellenfélével." },
+          { q: "Mi a coup en passant?",
+            a: "A felvevő egy <em>oldalszín lehívásával kvázi „elsétál\"</em> az ellenfél magas aduja mellett: az ellenfél vagy felüt aduval (akkor a felvevő aduja érvényesül később), vagy nem üt fel (akkor az oldalszín ütést kapjuk). A trump coup egy enyhébb változata." },
+          { q: "Mi a loser-on-loser play, és mikor használjuk?",
+            a: "Egy oldalszín kiadó ütésére saját kiadónk eldobása — látszólag ostobaság, valójában taktikai: <em>(1)</em> endplay előkészítése (kiválasztjuk, ki üssön; biztonságos exit-kártyákat eltávolítunk). <em>(2)</em> adusplit elkerülése (ha a partner aduvágna ránk). <em>(3)</em> communication megőrzése (saját ütésünk megőrzése későbbi belépőként)." },
+          { q: "Mi a dummy reversal, és mikor érdemes alkalmazni?",
+            a: "Az alap-stratégia szerint a HOSSZABB adu-kéz húzza az adut. A dummy reversal <em>ellentétes</em>: <strong>a hosszú adu-kéznél ruff-olunk, és a rövid adu-kézzel húzzuk az aduslagot</strong>. Akkor érdemes, ha a hosszú kézben kevés a melléküt, és a rövid kéznél hosszú szín lehívható. Tipikus felállás: 5-3 vagy 6-3 adu + dummyban a hosszabb." },
+          { q: "Mi az avoidance play?",
+            a: "Az „okos\" módja, hogy <strong>MINDIG ugyanazt a (veszélyes) ellenfelet tartsuk ütésen kívül</strong>. Tipikusan 3NT-ben, ahol az egyik ellenfél hosszú szín-fenyegetése aktív. Fineszelési irányokat választunk meg úgy, hogy a veszélyes ellenfél ne kerüljön be. Néha szándékosan kiengedünk a NEM-veszélyes ellenfélnek." },
+          { q: "Mi a safety play, és milyen alapelvet követünk?",
+            a: "<strong>A maximális ütésszám helyett a SZERZŐDÉS biztosítása</strong>. Lemondunk az „extra\" ütésről rosszabb állásban a játékvitel garantálásáért. Általános elv: <em>minden lehetséges színeloszlást vegyünk számba, és válasszuk azt a sorrendet, ami a LEGROSSZABB esetben is teljesít</em>." },
+          { q: "Példa safety play: AKxxx vs xxx, 4 ütés a cél — mi a helyes játék?",
+            a: "<strong>Kis lap mindkét kézből az első körben</strong> (a magas lapok megtartása). 4 ütést garantál akkor is, ha JTxx van velünk szemben (4-1 split). A „mohó\" AK lehívás csak 3-2 esetén ad 5-öt, de 4-1 esetén csak 4-et — viszont a safety mindig 4 garantált." },
+          { q: "Mi a hold-up play, és mit ér el?",
+            a: "NT-játékban a stopperünket szándékosan visszatartjuk, hogy <strong>az ellenfél kommunikációját megszakítsuk</strong>. Klasszikus Rule of 7: ha 7 lap van velünk + dummynál, a maradékot kiszámolva 2-3-szor át kell engednünk az ellenfél indítását, mielőtt bevesszük." },
+          { q: "Mi a communication play / unblocking, és klasszikus példa?",
+            a: "A két kéz közötti <strong>belépők megőrzése</strong>. Unblocking: szándékosan kidobunk egy magas lapot a rövid kézből, hogy a hosszú kéz lapja át tudjon menni. Példa: Dummy ♥AKxxx, kezemben ♥Q2 → ha mindkét kézből kis lapot játszanánk, a ♥Q akadályozná a hosszú kőr lehívását. Helyette: a ♥Q-t alaengedjük az ♥A vagy ♥K alá!" },
+          { q: "Mi a felvevő alapdiszciplínája, a counting fő mnemonikája?",
+            a: "<strong>LFP-O</strong>: <strong>L</strong>icit alapján (közbeszólás → 5+ lap; passz → max 5 HCP). <strong>F</strong>elüt és nem üt (ha egy ellenfél nem ad ütést egy nyerő lappal, az infó). <strong>P</strong>akli zárt (13-13-13-13 lap; minden látható + asztal + saját játszott = kiadja). <strong>O</strong>lvasott szignálok (count + attitude). Az endplay-ek és squeeze-ek 90%-ban a count-on múlnak." },
+          { q: "Miért fontos az entries (belépők) számolása az indulás után?",
+            a: "Egy klasszikus 3NT-bukás kiváltó oka, hogy a felvevő <strong>1 belépővel kevesebbet számol</strong> egy AQxx-finesz kétszeri ismétlésére. 1-2 percet rászánni az átmenetek számolására <em>minden szerződés elején</em> — ez az „életbiztosítás\"." },
+          /* --- ÚJ BŐVÍTETT KÁRTYÁK --- */
+          { q: "Mondj példát a Positional Squeeze-re (pozicionális squeeze)!",
+            a: "Dummyban ♥Q és ♦K van. Felvevőnél egy utolsó ♣A (squeeze card). A bal oldali ellenfél (Nyugat) tartja a ♥K-t és a ♦A-t. Amikor lejátszod a ♣A-t, Nyugat beszorul. (Ha Keleten lenne a két stopper, <em>ő</em> a dummy mögött ütne, így nem szorulna be – ezért pozicionális)." },
+          { q: "Mondj egy klasszikus példát Trump Coup lejátszásra!",
+            a: "A jobb oldali védőnél van a ♠J9 adu. Nálunk ♠KQ maradt a dummyban, de a mi kezünkből elfogyott. Ha csak lehívjuk a ♠K-t, a J alá esik, de a 9 üt. <strong>Trump Coup:</strong> Úgy fogyatjuk az adunkat (ruffolásokkal), hogy pont egyenlő legyen az övével (2 db). A legvégén a védőnek elsőként KELL adut húznia, így a J alulról jön, mi pedig KQ-val felülütjük mindkét lapját." },
+          { q: "Mondj egy konkrét szituációt a Strip Squeeze-re (squeeze-without-the-count)!",
+            a: "Szerződés 6NT, van 11 ütésünk, 12 kell. A védő tart egy ♠K-t (fenyegetés) és egy ♣K-t. A ♣K egy \"menekülő\" lap. Ha a squeeze kártyára a ♣K-t dobja, az a mi ♣A-nk felé ütést csinál. Ha a ♣K-t megtartja (és a pikkjét is), akkor endplaybe hajtjuk a ♣A lehívásával: kénytelen beütni a ♣K-val, és bele kell játszania a mi ♠AQ-nkba!" },
+          { q: "Mondj példát Dummy Reversal (asztal-megfordítás) stratégiára!",
+            a: "Szerződés 6♠. A dummyban ♠AQJxx (5 lap) van. Nálunk a kezünkben ♠Kx (2 lap). Ráadásul a kezünkben fut egy hosszú, solid ♦AKQJxx (6 lap). Ha a hosszú asztalon húznánk az adut, csak 5 pikk + 6 káró = 11 ütés lenne. <strong>Megfordítás:</strong> A rövid adus kezünkből adunk adut, és az asztal 5 pikkjével RUFFOLJUK a vesztőinket. Ezzel nyerünk plusz 1-2 ütést, és megvan a 12." },
+          { q: "Hogyan működik az Avoidance Play 3NT-ben (veszélyes ellenfél)?",
+            a: "Például nyugat indult az 5 lapos kőrjével. ♥A-val megállítjuk (hold-up után). Nálunk a hosszú káró: ♦KQJxx, dummy: ♦Axx. Nyugat a <strong>veszélyes ellenfél</strong> (ő tudná folytatni a kőrt, kelet nem). Ezért a kárót a dummy ♦A-val kezdjük lehívni (esetleg ott üt a király, ha keletnél van, aki nem veszélyes), hogy ne engedjük Nyugatot beütni egy káró figurával!" },
+          { q: "Mi az a \"Rule of 7\" a Hold-up (várakozás) játékban?",
+            a: "Megmutatja, hányszor kell átengedned a nyitó színt NT-ben az ellenfélnek. Képlet: <strong>7 mínusz a te és az asztal együttes lapjainak száma abban a színben</strong>. Ha pl. nálad 3 kőr, dummyban 2 kőr van (=5), akkor 7 - 5 = 2. Kétszer kell átengedned, a harmadikra veszed be (pl. az ászoddal)." },
+          { q: "Mondj egy konkrét példát a Safety Play-re (biztonsági játék), ha a cél 3 ütés biztosítása egy AQTx vs xxx színből!",
+            a: "Ha a mohó kétszeres fineszt (Q, majd T) megpróbáljuk, 2 ütést veszíthetünk, ha mind a K és J balról van. A <strong>Safety play</strong>: Lehívjuk az <strong>Ászt</strong> az első körben, majd kis lapot játszunk a Q felé. Így ha egy honor rosszul van, biztosítjuk a 3 ütést, megelőzve a teljes katasztrófát." },
+          { q: "Mit jelent az LFP-O a Counting (számolás) mnemonikájában?",
+            a: "A felvevő számolási alapja: <strong>L</strong> = Licit alapján következtetés (ki licitált, passzolt). <strong>F</strong> = Felüt/nem üt (következtetés abból, amit az ellenfél *nem* játszott meg). <strong>P</strong> = Pakli zárt (13-13-13-13). <strong>O</strong> = Olvasott szignálok (attitude, count, amit az ellenfelek egymásnak adnak)." }
+        ]
+      }
+
+    }
+  }
+};
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => document.querySelectorAll(s);
+
+const state = {
+  topicKey: null, 
+  chapterKey: null, 
+  deck: [], 
+  index: 0,
+  seen: 0, 
+  success: 0, 
+  fail: 0, 
+  streak: 0,
+  flipped: false, 
+  marked: false, 
+  missedCards: [],
+  _countedSeen: false
+};
+
+function showScreen(id) {
+  $$('.screen').forEach(s => s.classList.remove('active'));
+  const target = $('#' + id);
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function renderTopics() {
+  const grid = $('#topics-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  Object.entries(FLASHCARD_DATA).forEach(([key, topic]) => {
+    const chapterCount = Object.keys(topic.chapters).length;
+    const cardCount = Object.values(topic.chapters).reduce((sum, ch) => sum + ch.cards.length, 0);
+    const tile = document.createElement('button');
+    tile.className = 'tile';
+    tile.innerHTML = `
+      <span class="call-number">Call № ${topic.callNumber || key}</span>
+      <h3>${topic.title}</h3>
+      <p>${topic.description || ''}</p>
+      <div class="footer-line">
+        <span>${chapterCount} fejezet</span>
+        <span>${cardCount} lap</span>
+      </div>`;
+    tile.onclick = () => openTopic(key);
+    grid.appendChild(tile);
+  });
+}
+
+function openTopic(key) {
+  state.topicKey = key;
+  const topic = FLASHCARD_DATA[key];
+  $('#chapters-title').innerHTML = topic.title;
+  $('#crumbs-chapters').innerHTML = `<a id="crumb-home">A katalógus</a><span class="sep">/</span><span>${topic.plainTitle}</span>`;
+  $('#crumb-home').onclick = goHome;
+
+  const grid = $('#chapters-grid');
+  grid.innerHTML = '';
+  Object.entries(topic.chapters).forEach(([chKey, chapter]) => {
+    const tile = document.createElement('button');
+    tile.className = 'tile';
+    tile.innerHTML = `
+      <span class="call-number">Fejezet · ${chKey}</span>
+      <h3>${chapter.title}</h3>
+      <p>${chapter.description || ''}</p>
+      <div class="footer-line">
+        <span>${chapter.cards.length} lap</span>
+        <span>Kezdés →</span>
+      </div>`;
+    tile.onclick = () => openChapter(chKey);
+    grid.appendChild(tile);
+  });
+  showScreen('screen-chapters');
+}
+
+function openChapter(chapterKey, deckOverride) {
+  state.chapterKey = chapterKey;
+  const topic = FLASHCARD_DATA[state.topicKey];
+  const chapter = topic.chapters[chapterKey];
+
+  state.deck = deckOverride ? deckOverride.slice() : chapter.cards.slice();
+  if (state.deck.length === 0) return; // Fallback üres paklira
+
+  state.index = 0;
+  state.seen = 0; 
+  state.success = 0; 
+  state.fail = 0; 
+  state.streak = 0;
+  state.flipped = false; 
+  state.marked = false; 
+  state.missedCards = [];
+  state._countedSeen = false;
+
+  $('#crumbs-study').innerHTML =
+    `<a id="crumb-home-s">A katalógus</a><span class="sep">/</span>` +
+    `<a id="crumb-topic-s">${topic.plainTitle}</a><span class="sep">/</span>` +
+    `<span>${chapter.title}</span>`;
+  $('#crumb-home-s').onclick  = goHome;
+  $('#crumb-topic-s').onclick = () => openTopic(state.topicKey);
+
+  renderCard();
+  updateStats();
+  showScreen('screen-study');
+}
+
+function renderCard() {
+  const card = state.deck[state.index];
+  if (!card) return;
+  $('#card-question').innerHTML = card.q;
+  $('#card-answer').innerHTML   = card.a;
+  const label = `Lap ${state.index + 1} / ${state.deck.length}`;
+  $('#card-index').textContent = label;
+  $('#card-index-back').textContent = label;
+  $('#card').classList.remove('flipped');
+  state.flipped = false;
+  state.marked = false;
+  updateButtons();
+}
+
+function flipCard() {
+  state.flipped = !state.flipped;
+  $('#card').classList.toggle('flipped', state.flipped);
+  if (state.flipped && !state.marked && !state._countedSeen) {
+    state.seen++;
+    state._countedSeen = true;
+    updateStats();
+  }
+  updateButtons();
+}
+
+function mark(result) {
+  if (state.marked) return;
+  state.marked = true;
+  if (!state._countedSeen) { state.seen++; state._countedSeen = true; }
+  
+  if (result === 'success') {
+    state.success++;
+    state.streak++;
+    showStamp('success');
+  } else {
+    state.fail++;
+    state.streak = 0;
+    state.missedCards.push(state.deck[state.index]);
+    showStamp('fail');
+  }
+  updateStats();
+  updateButtons();
+}
+
+function showStamp(kind) {
+  const el = $('#stamp-' + kind);
+  el.classList.remove('show');
+  void el.offsetWidth; // Reflow forcing
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1100);
+}
+
+function nextCard() {
+  if (state.index < state.deck.length - 1) {
+    const cardEl = $('#card');
+    cardEl.classList.add('swapping');
+    setTimeout(() => {
+      state.index++;
+      state._countedSeen = false;
+      renderCard();
+    }, 250);
+    setTimeout(() => cardEl.classList.remove('swapping'), 520);
+  } else {
+    endSession();
+  }
+}
+
+function updateStats() {
+  $('#stat-seen').textContent    = `${state.seen}/${state.deck.length}`;
+  $('#stat-success').textContent = state.success;
+  $('#stat-fail').textContent    = state.fail;
+  $('#stat-streak').textContent  = state.streak;
+  
+  const pct = state.deck.length
+    ? Math.round(((state.index + (state.marked ? 1 : 0)) / state.deck.length) * 100)
+    : 0;
+  $('#progress-fill').style.width = Math.min(pct, 100) + '%';
+}
+
+function updateButtons() {
+  $('#btn-success').disabled = !state.flipped || state.marked;
+  $('#btn-fail').disabled    = !state.flipped || state.marked;
+  $('#btn-next').disabled    = false;
+  
+  if (state.index === state.deck.length - 1) {
+    $('#btn-next').textContent = 'Befejezés ✦';
+  } else {
+    $('#btn-next').innerHTML = 'Következő <span class="kbd">→</span>';
+  }
+}
+
+function shuffleDeck() {
+  for (let i = state.deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [state.deck[i], state.deck[j]] = [state.deck[j], state.deck[i]];
+  }
+  state.index = 0;
+  state.seen = 0; 
+  state.success = 0; 
+  state.fail = 0; 
+  state.streak = 0;
+  state.missedCards = [];
+  state._countedSeen = false;
+  renderCard();
+  updateStats();
+}
+
+function restartChapter() { openChapter(state.chapterKey); }
+
+function endSession() {
+  const total = state.deck.length;
+  const pct = state.seen ? Math.round((state.success / state.seen) * 100) : 0;
+
+  $('#sum-success').textContent = state.success;
+  $('#sum-seen').textContent    = `${state.seen}/${total}`;
+  $('#sum-rate').textContent    = pct + '%';
+
+  const lede =
+      pct >= 90 ? "Példamutató teljesítés. A könyvtáros bólint."
+    : pct >= 70 ? "Tisztességes felmérés. Haladsz."
+    : pct >= 50 ? "Stabil alap. Egy újabb átfutás élesíti az éleket."
+    :             "Szerény kezdet. Vissza a polcokhoz, és próbáld újra.";
+  $('#summary-lede').textContent = lede;
+
+  const seal = $('#seal');
+  if (pct >= 90) seal.innerHTML = "WITH<br>HONORS";
+  else if (pct >= 70) seal.innerHTML = "PASSED<br>WITH<br>MERIT";
+  else seal.innerHTML = "EX<br>LIBRIS<br>STUDII";
+
+  const missedBlock = $('#summary-missed-block');
+  const missedList  = $('#summary-missed');
+  if (state.missedCards.length) {
+    missedBlock.style.display = 'block';
+    missedList.innerHTML = state.missedCards
+      .map(c => `<li>· ${c.q.replace(/<[^>]+>/g,'').slice(0, 90)}${c.q.length > 90 ? '…' : ''}</li>`).join('');
+    $('#btn-review-missed').style.display = '';
+  } else {
+    missedBlock.style.display = 'none';
+    $('#btn-review-missed').style.display = 'none';
+  }
+
+  showScreen('screen-summary');
+}
+
+function goHome() {
+  state.topicKey = null;
+  state.chapterKey = null;
+  showScreen('screen-topics');
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  renderTopics();
+
+  $('#card').addEventListener('click', () => flipCard());
+  $('#btn-flip').onclick    = flipCard;
+  $('#btn-success').onclick = () => mark('success');
+  $('#btn-fail').onclick    = () => mark('fail');
+  $('#btn-next').onclick    = nextCard;
+  $('#btn-shuffle').onclick = shuffleDeck;
+  $('#btn-restart-chapter').onclick = restartChapter;
+  $('#btn-end-session').onclick = endSession;
+
+  $('#btn-back-catalog').onclick   = goHome;
+  $('#btn-redo-chapter').onclick   = restartChapter;
+  $('#btn-review-missed').onclick  = () => {
+    if (state.missedCards.length) {
+      openChapter(state.chapterKey, state.missedCards);
+    }
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (!$('#screen-study').classList.contains('active')) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    switch(e.key) {
+      case ' ':
+      case 'Enter':
+        e.preventDefault();
+        flipCard();
+        break;
+      case '1':
+        if (state.flipped && !state.marked) mark('success');
+        break;
+      case '2':
+        if (state.flipped && !state.marked) mark('fail');
+        break;
+      case 'ArrowRight':
+      case 'n':
+      case 'N':
+        e.preventDefault();
+        nextCard();
+        break;
+    }
+  });
+});
+</script>
+
+</body>
+</html>
